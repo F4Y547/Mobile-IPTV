@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# Build
+*.jsbundle
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Android
+android/app/build/
+android/.gradle/
+android/build/
+local.properties
+*.keystore
+
+# iOS
+ios/Pods/
+ios/build/
+*.xcworkspace
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Supabase
+supabase/.temp/
+
+# Admin (env config in HTML)
+admin/.env
+
+# Misc
+*.log
+*.bak
