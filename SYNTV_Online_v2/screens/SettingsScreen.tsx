@@ -64,7 +64,7 @@ export default function SettingsScreen({ navigation }: Props) {
               <Text className="text-[#94A3B8] text-xs">{profile?.email || ''}</Text>
               <View className="flex-row items-center bg-yellow-500/15 px-2.5 py-0.5 rounded-full mt-1.5 gap-1.5 self-start">
                 <Ionicons name="diamond" size={12} color="#F59E0B" />
-                <Text className="text-[#F59E0B] text-[10px] font-bold uppercase">{profile?.subscription_tier || 'Free'}</Text>
+                <Text className="text-[#F59E0B] text-[10px] font-bold uppercase">{profile?.subscription_plan || 'Free'}</Text>
               </View>
             </View>
             <TouchableOpacity className="bg-[#101827] px-4 py-2 rounded-full border border-white/10">
@@ -79,7 +79,7 @@ export default function SettingsScreen({ navigation }: Props) {
           <View className="mx-5 bg-[#101827] rounded-2xl border border-white/10 overflow-hidden">
             <SettingItem icon="server" label="Manage Playlists" subtitle="View and manage your IPTV playlists" onPress={() => navigation.navigate('AddPlaylist')} />
             <View className="h-[1px] bg-white/5 ml-[60px]" />
-            <SettingItem icon="diamond" label="Subscription" subtitle={`${profile?.subscription_tier === 'premium' ? 'Premium' : 'Free'} plan`} onPress={() => {}} />
+            <SettingItem icon="diamond" label="Subscription" subtitle={`${profile?.subscription_plan === 'premium' || profile?.subscription_plan === 'family' ? 'Premium' : 'Free'} plan`} onPress={() => {}} />
             <View className="h-[1px] bg-white/5 ml-[60px]" />
             <SettingItem icon="lock-closed" label="Parental Control" subtitle="Set content restrictions PIN" onPress={() => {}} />
             <View className="h-[1px] bg-white/5 ml-[60px]" />

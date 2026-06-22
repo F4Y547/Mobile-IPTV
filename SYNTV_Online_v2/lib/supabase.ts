@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Playlist, WatchHistory } from '../types';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -20,16 +21,6 @@ export async function signUp(email: string, password: string, fullName: string) 
     options: { data: { full_name: fullName } },
   });
   if (authError) throw authError;
-
-  if (authData.user) {
-    const { error: profileError } = await supabase.from('user_profiles').insert({
-      id: authData.user.id,
-      email,
-      full_name: fullName,
-      subscription_tier: 'free',
-    });
-    if (profileError) throw profileError;
-  }
   return authData;
 }
 
@@ -53,7 +44,7 @@ export async function getUserProfile(userId: string) {
   const { data, error } = await supabase
     .from('user_profiles')
     .select('*')
-    .eq('id', userId)
+    .eq('user_id', userId)
     .single();
   if (error) throw error;
   return data;
@@ -103,23 +94,77 @@ export async function searchChannels(playlistId: string, query: string, limit = 
   return data || [];
 }
 
-export async function toggleFavoriteChannel(channelId: string, isFavorite: boolean) {
-  const { error } = await supabase
-    .from('channels')
-    .update({ is_favorite: isFavorite })
-    .eq('id', channelId);
-  if (error) throw error;
-}
-
-export async function getFavorites(userId: string, type: 'channel' | 'movie' | 'series') {
-  const table = type === 'channel' ? 'channels' : type === 'movie' ? 'movies' : 'series';
+export async function getFavorites(userId: string) {
   const { data, error } = await supabase
-    .from(table)
+    .from('favorites')
     .select('*')
-    .eq('user_id', userId)
-    .eq('is_favorite', true);
+    .eq('user_id', userId);
   if (error) throw error;
   return data || [];
+}
+
+export async function getFavoriteChannels(userId: string) {
+  const { data, error } = await supabase
+    .from('favorites')
+    .select('content_id')
+    .eq('user_id', userId)
+    .eq('content_type', 'channel');
+  if (error) throw error;
+  return (data || []).map((f: any) => f.content_id);
+}
+
+export async function getFavoriteChannelsFull(userId: string) {
+  const ids = await getFavoriteChannels(userId);
+  if (ids.length === 0) return [];
+  const { data, error } = await supabase
+    .from('channels')
+    .select('*')
+    .in('id', ids);
+  if (error) throw error;
+  return data || [];
+}
+
+export async function isChannelFavorite(userId: string, channelId: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('favorites')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('content_type', 'channel')
+    .eq('content_id', channelId)
+    .maybeSingle();
+  if (error) throw error;
+  return !!data;
+}
+
+export async function toggleFavoriteChannel(userId: string, channelId: string): Promise<boolean> {
+  const { data: existing, error: findError } = await supabase
+    .from('favorites')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('content_type', 'channel')
+    .eq('content_id', channelId)
+    .maybeSingle();
+
+  if (findError) throw findError;
+
+  if (existing) {
+    const { error } = await supabase
+      .from('favorites')
+      .delete()
+      .eq('id', existing.id);
+    if (error) throw error;
+    return false;
+  }
+
+  const { error } = await supabase
+    .from('favorites')
+    .insert({
+      user_id: userId,
+      content_type: 'channel',
+      content_id: channelId,
+    });
+  if (error) throw error;
+  return true;
 }
 
 export async function saveWatchHistory(entry: Omit<WatchHistory, 'id'>) {
@@ -138,5 +183,3 @@ export async function getWatchHistory(userId: string, limit = 20) {
   if (error) throw error;
   return data || [];
 }
-
-import { Playlist, WatchHistory } from '../types';

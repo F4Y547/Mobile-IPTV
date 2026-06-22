@@ -143,7 +143,6 @@ export const usePlaylistStore = create<PlaylistState>((set, get) => ({
         tvg_name: ch.tvgName || null,
         country: ch.country || null,
         language: ch.language || null,
-        is_favorite: false,
       }));
 
       if (channelsToSave.length > 0) {

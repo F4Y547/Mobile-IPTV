@@ -10,9 +10,10 @@ interface Props {
   onPress: () => void;
   onToggleFavorite: () => void;
   variant?: 'grid' | 'list';
+  isFavorite?: boolean;
 }
 
-export default function ChannelCard({ channel, onPress, onToggleFavorite, variant = 'grid' }: Props) {
+export default function ChannelCard({ channel, onPress, onToggleFavorite, variant = 'grid', isFavorite = false }: Props) {
   if (variant === 'list') {
     return (
       <TouchableOpacity
@@ -31,7 +32,7 @@ export default function ChannelCard({ channel, onPress, onToggleFavorite, varian
             <Text className="text-red-500 text-[9px] font-bold">LIVE</Text>
           </View>
         )}
-        <FavoriteButton isFavorite={channel.is_favorite} onToggle={onToggleFavorite} size={18} />
+        <FavoriteButton isFavorite={isFavorite} onToggle={onToggleFavorite} size={18} />
         <Ionicons name="play-circle" size={28} color="#00AEEF" />
       </TouchableOpacity>
     );
@@ -47,7 +48,7 @@ export default function ChannelCard({ channel, onPress, onToggleFavorite, varian
               <Text className="text-white text-[9px] font-bold">LIVE</Text>
             </View>
           )}
-          <FavoriteButton isFavorite={channel.is_favorite} onToggle={onToggleFavorite} size={18} />
+          <FavoriteButton isFavorite={isFavorite} onToggle={onToggleFavorite} size={18} />
         </View>
         <View className="items-center justify-center flex-1">
           <Image source={{ uri: channel.logo }} className="w-12 h-12 rounded-full" />

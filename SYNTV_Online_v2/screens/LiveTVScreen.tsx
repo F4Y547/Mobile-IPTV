@@ -5,6 +5,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { usePlaylistStore } from '../store/playlistStore';
 import { useFavoriteStore } from '../store/favoriteStore';
+import { useAuthStore } from '../store/authStore';
 import SearchBar from '../components/SearchBar';
 import ChannelCard from '../components/ChannelCard';
 import { ListSkeleton } from '../components/LoadingSkeleton';
@@ -18,7 +19,8 @@ const ITEMS_PER_PAGE = 30;
 
 export default function LiveTVScreen({ navigation, route }: Props) {
   const { channels, activePlaylist } = usePlaylistStore();
-  const { channelFavorites, toggleChannelFavorite } = useFavoriteStore();
+  const { isChannelFavorite, toggleChannelFavorite } = useFavoriteStore();
+  const { profile } = useAuthStore();
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -58,18 +60,17 @@ export default function LiveTVScreen({ navigation, route }: Props) {
   const handleToggleFav = useCallback((channel: any) => {
     toggleChannelFavorite(
       {
-        id: channel.id || `ch_${channel.name}`,
+        id: channel.name,
         playlist_id: activePlaylist?.id || '',
         name: channel.name,
         stream_url: channel.streamUrl,
         logo: channel.tvgLogo || '',
         category: channel.category,
-        is_favorite: channelFavorites.some((c: any) => c.id === channel.id || c.name === channel.name),
         is_live: true,
-      },
-      ''
+      } as any,
+      profile?.user_id || profile?.id || ''
     );
-  }, [activePlaylist, channelFavorites]);
+  }, [activePlaylist, profile?.user_id, profile?.id]);
 
   if (!channels.length) {
     return (
@@ -139,16 +140,16 @@ export default function LiveTVScreen({ navigation, route }: Props) {
           <View style={viewMode === 'grid' ? { width: '48%' } : {}}>
             <ChannelCard
               channel={{
-                id: `ch_${index}`,
+                id: item.name,
                 playlist_id: activePlaylist?.id || '',
                 name: item.name,
                 stream_url: item.streamUrl,
                 logo: item.tvgLogo || '',
                 category: item.category || 'Uncategorized',
                 tvg_id: item.tvgId,
-                is_favorite: channelFavorites.some((f: any) => f.name === item.name),
                 is_live: true,
               }}
+              isFavorite={isChannelFavorite(item.name)}
               onPress={() => navigation.navigate('Player', { channel: item })}
               onToggleFavorite={() => handleToggleFav(item)}
               variant={viewMode === 'list' ? 'list' : 'grid'}

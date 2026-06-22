@@ -9,9 +9,10 @@ interface Props {
   movie: Movie;
   onPress: () => void;
   onToggleFavorite: () => void;
+  isFavorite?: boolean;
 }
 
-export default function MovieCard({ movie, onPress, onToggleFavorite }: Props) {
+export default function MovieCard({ movie, onPress, onToggleFavorite, isFavorite = false }: Props) {
   return (
     <TouchableOpacity className="w-[140px] h-[210px] mr-4 rounded-2xl overflow-hidden" onPress={onPress} activeOpacity={0.85}>
       <Image
@@ -26,7 +27,7 @@ export default function MovieCard({ movie, onPress, onToggleFavorite }: Props) {
             <Text className="text-white text-[10px] font-bold ml-0.5">{movie.rating}</Text>
           </View>
         )}
-        <FavoriteButton isFavorite={movie.is_favorite} onToggle={onToggleFavorite} size={18} />
+        <FavoriteButton isFavorite={isFavorite} onToggle={onToggleFavorite} size={18} />
       </View>
       <View className="absolute bottom-2 left-2 right-2">
         <Text className="text-[#F8FAFC] text-xs font-semibold" numberOfLines={2}>{movie.title}</Text>

@@ -16,7 +16,8 @@ export default function FavoritesScreen({ navigation }: Props) {
   const [activeTab, setActiveTab] = useState<'channels' | 'movies' | 'series'>('channels');
 
   useEffect(() => {
-    if (profile?.id) loadFavorites(profile.id);
+    const userId = profile?.user_id || profile?.id;
+    if (userId) loadFavorites(userId);
   }, [profile?.id]);
 
   const tabs = [
@@ -39,6 +40,7 @@ export default function FavoritesScreen({ navigation }: Props) {
           renderItem={({ item }) => (
             <ChannelCard
               channel={item}
+              isFavorite={true}
               onPress={() => navigation.navigate('Player', { channel: item })}
               onToggleFavorite={() => {}}
               variant="list"

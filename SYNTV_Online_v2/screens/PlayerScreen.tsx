@@ -20,19 +20,20 @@ export default function PlayerScreen({ navigation, route }: Props) {
   const { channel } = route.params;
   const { profile } = useAuthStore();
   const { channels } = usePlaylistStore();
-  const { channelFavorites, toggleChannelFavorite } = useFavoriteStore();
+  const { isChannelFavorite, toggleChannelFavorite } = useFavoriteStore();
   const { currentProgram, nextProgram } = usePlayerStore();
 
   const currentIndex = channels.findIndex((c) => c.name === channel.name);
   const nextChannel = currentIndex >= 0 && currentIndex < channels.length - 1 ? channels[currentIndex + 1] : null;
   const prevChannel = currentIndex > 0 ? channels[currentIndex - 1] : null;
   const relatedChannels = channels.filter((c) => c.category === channel.category && c.name !== channel.name).slice(0, 5);
-  const isFav = channelFavorites.some((f) => f.name === channel.name);
+  const isFav = isChannelFavorite(channel.name);
 
   useEffect(() => {
-    if (profile?.id) {
+    const uid = profile?.user_id || profile?.id;
+    if (uid) {
       saveWatchHistory({
-        user_id: profile.id,
+        user_id: uid,
         content_id: channel.name,
         content_type: 'channel',
         title: channel.name,
@@ -41,7 +42,7 @@ export default function PlayerScreen({ navigation, route }: Props) {
       });
       addRecentChannel(channel.name);
     }
-  }, [channel.name, profile?.id]);
+  }, [channel.name, uid]);
 
   const switchChannel = (ch: any) => {
     navigation.replace('Player', { channel: ch });
@@ -71,8 +72,16 @@ export default function PlayerScreen({ navigation, route }: Props) {
           </View>
           <View className="flex-row gap-3">
             <FavoriteButton isFavorite={isFav} onToggle={() => toggleChannelFavorite(
-              { id: channel.name, playlist_id: '', name: channel.name, stream_url: channel.streamUrl, logo: channel.tvgLogo || '', category: channel.category, is_favorite: !isFav, is_live: true },
-              ''
+              {
+                id: channel.name,
+                playlist_id: '',
+                name: channel.name,
+                stream_url: channel.streamUrl,
+                logo: channel.tvgLogo || '',
+                category: channel.category,
+                is_live: true,
+              } as any,
+              profile?.id || ''
             )} size={22} />
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons name="close" size={24} color="#94A3B8" />

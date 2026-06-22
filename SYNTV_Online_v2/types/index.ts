@@ -1,11 +1,16 @@
 export interface UserProfile {
   id: string;
+  user_id: string;
   email: string;
   full_name: string;
   avatar_url?: string;
-  subscription_tier: 'free' | 'premium';
-  subscription_expires?: string;
+  role: 'user' | 'admin';
+  subscription_status: 'free' | 'active' | 'expired' | 'cancelled';
+  subscription_plan: 'free' | 'premium' | 'family';
+  subscription_expires_at?: string;
+  is_disabled: boolean;
   created_at: string;
+  updated_at: string;
 }
 
 export interface Playlist {
@@ -36,7 +41,6 @@ export interface Channel {
   tvg_name?: string;
   country?: string;
   language?: string;
-  is_favorite: boolean;
   is_live?: boolean;
 }
 
@@ -52,7 +56,6 @@ export interface Movie {
   rating?: number;
   duration?: string;
   description?: string;
-  is_favorite: boolean;
 }
 
 export interface Series {
@@ -65,7 +68,6 @@ export interface Series {
   year?: number;
   rating?: number;
   description?: string;
-  is_favorite: boolean;
   seasons: Season[];
 }
 

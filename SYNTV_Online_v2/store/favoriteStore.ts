@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { Channel, Movie, Series } from '../types';
-import { getFavorites, toggleFavoriteChannel } from '../lib/supabase';
-import { getFavoriteIds, setFavoriteIds } from '../lib/storage';
+import { getFavoriteChannels, getFavoriteChannelsFull, toggleFavoriteChannel, getFavorites } from '../lib/supabase';
 
 interface FavoriteState {
   channelFavorites: Channel[];
   movieFavorites: Movie[];
   seriesFavorites: Series[];
+  favoriteChannelIds: string[];
   isLoading: boolean;
 
   loadFavorites: (userId: string) => Promise<void>;
@@ -22,18 +22,19 @@ export const useFavoriteStore = create<FavoriteState>((set, get) => ({
   channelFavorites: [],
   movieFavorites: [],
   seriesFavorites: [],
+  favoriteChannelIds: [],
   isLoading: false,
 
   loadFavorites: async (userId) => {
     set({ isLoading: true });
     try {
-      const channels = await getFavorites(userId, 'channel');
-      const movies = await getFavorites(userId, 'movie') as any as Movie[];
-      const series = await getFavorites(userId, 'series') as any as Series[];
+      const [ids, fullChannels] = await Promise.all([
+        getFavoriteChannels(userId),
+        getFavoriteChannelsFull(userId),
+      ]);
       set({
-        channelFavorites: channels as Channel[],
-        movieFavorites: movies,
-        seriesFavorites: series,
+        favoriteChannelIds: ids,
+        channelFavorites: fullChannels as Channel[],
         isLoading: false,
       });
     } catch {
@@ -42,14 +43,27 @@ export const useFavoriteStore = create<FavoriteState>((set, get) => ({
   },
 
   toggleChannelFavorite: async (channel, userId) => {
-    const { channelFavorites } = get();
-    const isFav = channelFavorites.some((c) => c.id === channel.id);
-    const updated = isFav
-      ? channelFavorites.filter((c) => c.id !== channel.id)
-      : [...channelFavorites, channel];
+    if (!userId) return;
+    const { channelFavorites, favoriteChannelIds } = get();
+    const isFav = favoriteChannelIds.includes(channel.id);
 
-    set({ channelFavorites: updated });
-    await toggleFavoriteChannel(channel.id, !isFav);
+    try {
+      const nowFav = await toggleFavoriteChannel(userId, channel.id);
+
+      if (nowFav) {
+        set({
+          favoriteChannelIds: [...favoriteChannelIds, channel.id],
+          channelFavorites: [...channelFavorites, channel],
+        });
+      } else {
+        set({
+          favoriteChannelIds: favoriteChannelIds.filter((id) => id !== channel.id),
+          channelFavorites: channelFavorites.filter((c) => c.id !== channel.id),
+        });
+      }
+    } catch {
+      // revert optimistic update on error
+    }
   },
 
   toggleMovieFavorite: (movie) => {
@@ -68,7 +82,7 @@ export const useFavoriteStore = create<FavoriteState>((set, get) => ({
     set({ seriesFavorites: updated });
   },
 
-  isChannelFavorite: (channelId) => get().channelFavorites.some((c) => c.id === channelId),
+  isChannelFavorite: (channelId) => get().favoriteChannelIds.includes(channelId),
   isMovieFavorite: (movieId) => get().movieFavorites.some((m) => m.id === movieId),
   isSeriesFavorite: (seriesId) => get().seriesFavorites.some((s) => s.id === seriesId),
 }));

@@ -15,10 +15,11 @@ export default function AddPlaylistScreen({ navigation }: Props) {
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async (data: any) => {
-    if (!profile?.id) return;
+    const uid = profile?.user_id || profile?.id;
+    if (!uid) return;
     setSaving(true);
     try {
-      await savePlaylist(data, profile.id);
+      await savePlaylist(data, uid);
       Alert.alert('Success', 'Playlist added successfully.', [
         { text: 'OK', onPress: () => navigation.goBack() },
       ]);

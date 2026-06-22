@@ -21,11 +21,11 @@ interface Props {
 export default function HomeScreen({ navigation }: Props) {
   const { profile } = useAuthStore();
   const { playlists, loadPlaylists, channels, categories, setActivePlaylist } = usePlaylistStore();
-  const { channelFavorites } = useFavoriteStore();
+  const { channelFavorites, favoriteChannelIds, isChannelFavorite } = useFavoriteStore();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const userId = profile?.id;
+  const userId = profile?.user_id || profile?.id;
 
   useEffect(() => {
     if (userId) {
@@ -94,12 +94,12 @@ export default function HomeScreen({ navigation }: Props) {
           <View className="flex-row items-center justify-between">
             <View>
               <Text className="text-[#94A3B8] text-xs">Current Plan</Text>
-              <Text className="text-white text-2xl font-bold mt-0.5">{profile?.subscription_tier === 'premium' ? 'Premium' : 'Free'}</Text>
-              {profile?.subscription_expires && (
-                <Text className="text-[#94A3B8] text-[10px] mt-1">Expires: {new Date(profile.subscription_expires).toLocaleDateString()}</Text>
+              <Text className="text-white text-2xl font-bold mt-0.5">{profile?.subscription_plan === 'premium' || profile?.subscription_plan === 'family' ? 'Premium' : 'Free'}</Text>
+              {profile?.subscription_expires_at && (
+                <Text className="text-[#94A3B8] text-[10px] mt-1">Expires: {new Date(profile.subscription_expires_at).toLocaleDateString()}</Text>
               )}
             </View>
-            {profile?.subscription_tier !== 'premium' && (
+            {profile?.subscription_plan === 'free' && (
               <TouchableOpacity className="flex-row items-center bg-white/20 px-4 py-2.5 rounded-full gap-1.5">
                 <Text className="text-white font-bold text-xs">Upgrade</Text>
                 <Ionicons name="arrow-forward" size={14} color="#fff" />
@@ -144,16 +144,16 @@ export default function HomeScreen({ navigation }: Props) {
                     <ChannelCard
                       key={i}
                       channel={{
-                        id: `ch_${i}`,
+                        id: ch.name,
                         playlist_id: '',
                         name: ch.name,
                         stream_url: ch.streamUrl,
                         logo: ch.tvgLogo || '',
                         category: ch.category,
                         tvg_id: ch.tvgId,
-                        is_favorite: false,
                         is_live: true,
                       }}
+                      isFavorite={isChannelFavorite(ch.name)}
                       onPress={() => navigation.navigate('Player', { channel: ch })}
                       onToggleFavorite={() => {}}
                     />
@@ -175,6 +175,7 @@ export default function HomeScreen({ navigation }: Props) {
                     <ChannelCard
                       key={ch.id}
                       channel={ch}
+                      isFavorite={true}
                       onPress={() => navigation.navigate('Player', { channel: ch })}
                       onToggleFavorite={() => {}}
                     />
