@@ -1,4 +1,8 @@
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import webStorage from './webStorage';
+
+const Store = Platform.OS === 'web' ? webStorage : AsyncStorage;
 
 const KEYS = {
   LAST_PLAYLIST: '@syntv/last_playlist',
@@ -13,16 +17,16 @@ const KEYS = {
 
 export async function cacheData(key: string, data: any, ttlMs = 3600000) {
   const item = { data, timestamp: Date.now(), ttl: ttlMs };
-  await AsyncStorage.setItem(key, JSON.stringify(item));
+  await Store.setItem(key, JSON.stringify(item));
 }
 
 export async function getCachedData<T>(key: string): Promise<T | null> {
   try {
-    const raw = await AsyncStorage.getItem(key);
+    const raw = await Store.getItem(key);
     if (!raw) return null;
     const item = JSON.parse(raw);
     if (Date.now() - item.timestamp > item.ttl) {
-      await AsyncStorage.removeItem(key);
+      await Store.removeItem(key);
       return null;
     }
     return item.data as T;
@@ -68,24 +72,24 @@ export async function setAppSettings(settings: Record<string, any>) {
 }
 
 export async function isOnboardingDone(): Promise<boolean> {
-  const val = await AsyncStorage.getItem(KEYS.ONBOARDING_DONE);
+  const val = await Store.getItem(KEYS.ONBOARDING_DONE);
   return val === 'true';
 }
 
 export async function markOnboardingDone() {
-  await AsyncStorage.setItem(KEYS.ONBOARDING_DONE, 'true');
+  await Store.setItem(KEYS.ONBOARDING_DONE, 'true');
 }
 
 export async function clearAllCache() {
-  const keys = await AsyncStorage.getAllKeys();
+  const keys = await Store.getAllKeys();
   const appKeys = keys.filter((k) => k.startsWith('@syntv/'));
   if (appKeys.length > 0) {
-    await AsyncStorage.multiRemove(appKeys);
+    await Store.multiRemove(appKeys);
   }
 }
 
 export async function getParentalPin(): Promise<string | null> {
-  return AsyncStorage.getItem(KEYS.PARENTAL_PIN);
+  return Store.getItem(KEYS.PARENTAL_PIN);
 }
 
 export async function saveWatchHistory(entry: {
@@ -103,7 +107,7 @@ export async function saveWatchHistory(entry: {
 }
 
 export async function setParentalPin(pin: string) {
-  await AsyncStorage.setItem(KEYS.PARENTAL_PIN, pin);
+  await Store.setItem(KEYS.PARENTAL_PIN, pin);
 }
 
 export async function verifyParentalPin(pin: string): Promise<boolean> {

@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuthStore } from '../store/authStore';
 import { isOnboardingDone } from '../lib/storage';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
 import SplashScreen from '../screens/SplashScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
@@ -58,13 +59,19 @@ function AuthStack() {
 
 export default function App() {
   const [appState, setAppState] = useState<'splash' | 'onboarding' | 'app'>('splash');
+  const [startupTimeout, setStartupTimeout] = useState(false);
   const { isAuthenticated, isLoading, initialize } = useAuthStore();
 
   useEffect(() => {
-    initialize();
+    const timer = setTimeout(() => setStartupTimeout(true), 8000);
+    Promise.race([
+      initialize(),
+      new Promise<void>((_, reject) => setTimeout(() => reject(new Error('Auth init timed out')), 7000)),
+    ]).catch(() => {});
     isOnboardingDone().then((done) => {
       if (done) setAppState('app');
     });
+    return () => clearTimeout(timer);
   }, []);
 
   if (appState === 'splash') {
@@ -85,7 +92,7 @@ export default function App() {
     );
   }
 
-  if (isLoading) {
+  if (isLoading && !startupTimeout) {
     return (
       <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#050816' }}>
         <StatusBar style="light" />
@@ -94,13 +101,15 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <StatusBar style="light" />
-        <NavigationContainer theme={navTheme}>
-          {isAuthenticated ? <MainStack /> : <AuthStack />}
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <ErrorBoundary>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <StatusBar style="light" />
+          <NavigationContainer theme={navTheme}>
+            {isAuthenticated ? <MainStack /> : <AuthStack />}
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   );
 }

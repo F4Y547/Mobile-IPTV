@@ -2,7 +2,6 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Dimensions, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import Video, { VideoRef } from 'react-native-video';
 import { usePlayerStore } from '../store/playerStore';
 
 interface Props {
@@ -16,7 +15,7 @@ interface Props {
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export default function VideoPlayer({ streamUrl, channelName, onNext, onPrev }: Props) {
-  const videoRef = useRef<VideoRef>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const controlsTimer = useRef<NodeJS.Timeout | null>(null);
   const {
     isPlaying, isFullscreen, isMuted, isLoading, hasError, errorMessage,
@@ -29,6 +28,17 @@ export default function VideoPlayer({ streamUrl, channelName, onNext, onPrev }: 
   useEffect(() => {
     return () => reset();
   }, [streamUrl]);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (isPlaying) el.play().catch(() => {});
+    else el.pause();
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.muted = isMuted;
+  }, [isMuted]);
 
   const showControlsForAWhile = useCallback(() => {
     setShowControls(true);
@@ -59,17 +69,14 @@ export default function VideoPlayer({ streamUrl, channelName, onNext, onPrev }: 
     >
       <StatusBar hidden={isFullscreen} />
 
-      <Video
+      <video
         ref={videoRef}
-        source={{ uri: streamUrl }}
-        style={{ flex: 1 }}
-        paused={!isPlaying}
-        muted={isMuted}
-        resizeMode="contain"
-        onLoad={handleLoad}
+        src={streamUrl}
+        style={{ flex: 1, objectFit: 'contain' }}
+        autoPlay
+        playsInline
+        onCanPlay={handleLoad}
         onError={handleError}
-        onBuffer={({ isBuffering }) => setLoading(isBuffering)}
-        repeat
       />
 
       {isLoading && (
