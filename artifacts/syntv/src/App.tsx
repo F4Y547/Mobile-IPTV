@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PlayerProvider } from "@/context/PlayerContext";
 import MiniPlayer from "@/components/MiniPlayer";
+import ScoreTicker from "@/components/ScoreTicker";
 import HomePage from "@/pages/HomePage";
 import WatchPage from "@/pages/WatchPage";
 import CategoryPage from "@/pages/CategoryPage";
@@ -30,6 +31,7 @@ function App() {
       <TooltipProvider>
         <PlayerProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <ScoreTicker />
             <Router />
             <MiniPlayer />
           </WouterRouter>
