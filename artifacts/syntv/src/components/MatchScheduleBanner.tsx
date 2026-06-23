@@ -55,40 +55,40 @@ function MatchCard({ match }: { match: Match }) {
 
   return (
     <div
-      className="flex-shrink-0 w-72 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-4 hover:border-red-600/50 hover:bg-white/8 transition-all duration-200 group"
+      className="flex-shrink-0 w-[240px] sm:w-72 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-3 sm:p-4 hover:border-red-600/50 hover:bg-white/8 transition-all duration-200 group"
       data-testid={`match-card-${match.id}`}
     >
       {/* Stage + Live badge */}
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{match.stage}</span>
+      <div className="flex items-center justify-between mb-2 sm:mb-3">
+        <span className="text-[10px] sm:text-xs text-zinc-500 uppercase tracking-wider font-semibold">{match.stage}</span>
         {match.isLive ? (
           <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-600 text-white text-[10px] font-black uppercase tracking-wider">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             Live
           </span>
         ) : (
-          <span className="text-xs text-zinc-500">{formatKickoff(match.kickoff)}</span>
+          <span className="text-[10px] sm:text-xs text-zinc-500 truncate max-w-[120px]">{formatKickoff(match.kickoff)}</span>
         )}
       </div>
 
       {/* Teams */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className="flex flex-col items-center gap-1 flex-1">
-          <span className="text-3xl">{match.homeFlag}</span>
-          <span className="text-xs font-bold text-white text-center leading-tight">{match.homeTeam}</span>
+          <span className="text-2xl sm:text-3xl">{match.homeFlag}</span>
+          <span className="text-[10px] sm:text-xs font-bold text-white text-center leading-tight">{match.homeTeam}</span>
         </div>
 
-        <div className="flex flex-col items-center px-3">
+        <div className="flex flex-col items-center px-2 sm:px-3">
           {match.isLive ? (
-            <span className="text-red-400 font-black text-lg">LIVE</span>
+            <span className="text-red-400 font-black text-base sm:text-lg">LIVE</span>
           ) : (
-            <span className="text-zinc-400 font-bold text-sm">VS</span>
+            <span className="text-zinc-400 font-bold text-xs sm:text-sm">VS</span>
           )}
         </div>
 
         <div className="flex flex-col items-center gap-1 flex-1">
-          <span className="text-3xl">{match.awayFlag}</span>
-          <span className="text-xs font-bold text-white text-center leading-tight">{match.awayTeam}</span>
+          <span className="text-2xl sm:text-3xl">{match.awayFlag}</span>
+          <span className="text-[10px] sm:text-xs font-bold text-white text-center leading-tight">{match.awayTeam}</span>
         </div>
       </div>
 
@@ -113,7 +113,7 @@ function MatchCard({ match }: { match: Match }) {
               { val: countdown.seconds, label: "S" },
             ].map(({ val, label }) => (
               <div key={label} className="bg-black/40 rounded-md py-1">
-                <p className="text-white font-black text-sm tabular-nums">{String(val).padStart(2, "0")}</p>
+                <p className="text-white font-black text-xs sm:text-sm tabular-nums">{String(val).padStart(2, "0")}</p>
                 <p className="text-zinc-600 text-[9px] uppercase">{label}</p>
               </div>
             ))}
@@ -134,22 +134,20 @@ function MatchCard({ match }: { match: Match }) {
 }
 
 export default function MatchScheduleBanner() {
-  const scrollRef = useState<HTMLDivElement | null>(null);
-
   const scroll = (dir: "left" | "right") => {
     const el = document.getElementById("match-scroll");
-    if (el) el.scrollBy({ left: dir === "right" ? 300 : -300, behavior: "smooth" });
+    if (el) el.scrollBy({ left: dir === "right" ? 260 : -260, behavior: "smooth" });
   };
 
   return (
-    <div className="relative z-20 bg-gradient-to-r from-black via-zinc-950 to-black border-y border-white/5 py-5" data-testid="match-schedule-banner">
+    <div className="relative z-20 bg-gradient-to-r from-black via-zinc-950 to-black border-y border-white/5 py-4 sm:py-5" data-testid="match-schedule-banner">
       {/* Header */}
-      <div className="flex items-center justify-between px-8 md:px-16 mb-4">
-        <div className="flex items-center gap-3">
-          <span className="text-lg">🏆</span>
+      <div className="flex items-center justify-between px-4 md:px-16 mb-3 sm:mb-4">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="text-base sm:text-lg">🏆</span>
           <div>
-            <h3 className="text-white font-black text-sm uppercase tracking-wider">FIFA World Cup 2026</h3>
-            <p className="text-zinc-500 text-xs">Match Schedule · Group Stage</p>
+            <h3 className="text-white font-black text-xs sm:text-sm uppercase tracking-wider">FIFA World Cup 2026</h3>
+            <p className="text-zinc-500 text-[10px] sm:text-xs">Match Schedule · Group Stage</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -175,7 +173,7 @@ export default function MatchScheduleBanner() {
       {/* Scrollable match cards */}
       <div
         id="match-scroll"
-        className="flex gap-3 px-8 md:px-16 overflow-x-auto scrollbar-hide pb-1"
+        className="flex gap-3 px-4 md:px-16 overflow-x-auto scrollbar-hide pb-1"
       >
         {MATCHES.map(match => (
           <MatchCard key={match.id} match={match} />

@@ -47,27 +47,28 @@ export default function WatchPage() {
     <div className="min-h-screen bg-background">
       <Navbar />
       
-      <div className="max-w-[1600px] mx-auto p-4 md:p-8 flex flex-col lg:flex-row gap-8">
+      <div className="max-w-[1600px] mx-auto p-3 sm:p-4 md:p-8 flex flex-col lg:flex-row gap-4 md:gap-8">
         <div className="flex-1 min-w-0">
+          {/* Player */}
           <div 
             ref={playerWrapperRef}
             className="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800 relative z-10"
           >
-            {/* The main player */}
             <HlsPlayer url={channel.url} channel={channel} />
           </div>
 
-          <div className="mt-8 flex items-start gap-6">
-            <ChannelLogo channel={channel} size="lg" className="shrink-0 shadow-lg" />
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-white">{channel.name}</h1>
-                <span className="live-badge">LIVE</span>
+          {/* Channel info */}
+          <div className="mt-4 md:mt-8 flex items-start gap-3 md:gap-6">
+            <ChannelLogo channel={channel} size="lg" className="shrink-0 shadow-lg hidden sm:block" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2 flex-wrap">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{channel.name}</h1>
+                <span className="live-badge shrink-0">LIVE</span>
               </div>
-              <span className="inline-block px-3 py-1 bg-zinc-800 text-zinc-300 text-sm font-semibold rounded mb-4">
+              <span className="inline-block px-3 py-1 bg-zinc-800 text-zinc-300 text-xs md:text-sm font-semibold rounded mb-3 md:mb-4">
                 {channel.category}
               </span>
-              <p className="text-zinc-400 max-w-2xl leading-relaxed">
+              <p className="text-zinc-400 text-sm md:text-base max-w-2xl leading-relaxed">
                 Currently streaming {channel.name} live on SYNTV Online. Enjoy premium quality content without interruptions. 
                 Experience the best in {channel.category.toLowerCase()} entertainment.
               </p>
@@ -75,11 +76,23 @@ export default function WatchPage() {
           </div>
         </div>
 
-        {/* Desktop Sidebar */}
+        {/* Sidebar — full width below player on mobile, side column on desktop */}
         <div className="w-full lg:w-96 shrink-0">
-          <h3 className="text-xl font-bold text-white mb-4 pl-2 border-l-4 border-red-600">More {channel.category}</h3>
+          <h3 className="text-base md:text-xl font-bold text-white mb-3 md:mb-4 pl-2 border-l-4 border-red-600">More {channel.category}</h3>
           <div className="bg-card rounded-xl border border-card-border overflow-hidden">
-            <div className="flex flex-col max-h-[800px] overflow-y-auto scrollbar-hide">
+            {/* Mobile: horizontal scroll row */}
+            <div className="flex lg:hidden overflow-x-auto gap-3 p-3 scrollbar-hide">
+              {relatedChannels.slice(0, 12).map(rc => (
+                <Link key={rc.id} href={`/watch/${rc.id}`}>
+                  <div className="flex-none flex flex-col items-center gap-2 p-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 transition w-20 cursor-pointer group">
+                    <ChannelLogo channel={rc} size="sm" />
+                    <span className="text-white text-[10px] font-semibold text-center line-clamp-2 leading-tight group-hover:text-red-500 transition">{rc.name}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            {/* Desktop: vertical list */}
+            <div className="hidden lg:flex flex-col max-h-[800px] overflow-y-auto scrollbar-hide">
               {relatedChannels.map(rc => (
                 <Link key={rc.id} href={`/watch/${rc.id}`}>
                   <div className="flex items-center gap-4 p-4 hover:bg-zinc-800/50 cursor-pointer transition border-b border-zinc-800/50 last:border-0 group">
@@ -103,7 +116,7 @@ export default function WatchPage() {
       {/* Sticky Mini Player when scrolled out of view */}
       {!playerVisible && (
         <div className="mini-player-container shadow-2xl border border-zinc-800 animate-in fade-in slide-in-from-bottom-8">
-          <div className="w-full h-[180px] bg-black">
+          <div className="w-full h-[160px] sm:h-[180px] bg-black">
             <HlsPlayer url={channel.url} channel={channel} isMini={true} />
           </div>
           <div className="px-3 py-2 bg-zinc-900 border-t border-zinc-800 truncate flex items-center gap-2">

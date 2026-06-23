@@ -33,11 +33,11 @@ export default function CategoryRow({ title, channels, showAll = true }: Categor
   if (channels.length === 0) return null;
 
   return (
-    <div className="py-6 group/row" data-testid={`category-row-${title}`}>
-      <div className="flex items-end justify-between mb-4 px-8">
-        <h2 className="text-2xl font-bold text-white tracking-wide">{title}</h2>
+    <div className="py-4 md:py-6 group/row" data-testid={`category-row-${title}`}>
+      <div className="flex items-end justify-between mb-3 md:mb-4 px-4 md:px-8">
+        <h2 className="text-lg md:text-2xl font-bold text-white tracking-wide">{title}</h2>
         {showAll && (
-          <Link href={`/category/${title.toLowerCase()}`} className="text-sm font-semibold text-zinc-400 hover:text-red-500 transition">
+          <Link href={`/category/${title.toLowerCase()}`} className="text-xs md:text-sm font-semibold text-zinc-400 hover:text-red-500 transition">
             See All
           </Link>
         )}
@@ -47,17 +47,17 @@ export default function CategoryRow({ title, channels, showAll = true }: Categor
         {showLeftArrow && (
           <button 
             onClick={() => scroll("left")}
-            className="absolute left-0 top-0 bottom-0 w-16 z-20 flex items-center justify-center bg-gradient-to-r from-background to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity"
+            className="absolute left-0 top-0 bottom-0 w-10 md:w-16 z-20 flex items-center justify-center bg-gradient-to-r from-background to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity"
             data-testid={`scroll-left-${title}`}
           >
-            <ChevronLeft className="w-8 h-8 text-white drop-shadow-lg" />
+            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 text-white drop-shadow-lg" />
           </button>
         )}
 
         <div 
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex overflow-x-auto gap-4 px-8 pb-4 scrollbar-hide snap-x"
+          className="flex overflow-x-auto gap-3 md:gap-4 px-4 md:px-8 pb-3 md:pb-4 scrollbar-hide snap-x"
         >
           {channels.map((channel, idx) => (
             <motion.div
@@ -68,14 +68,14 @@ export default function CategoryRow({ title, channels, showAll = true }: Categor
               className="snap-start"
             >
               <Link href={`/watch/${channel.id}`}>
-                <div className="channel-card flex-none w-[160px] h-[220px] bg-card rounded-xl border border-card-border overflow-hidden relative flex flex-col items-center justify-center p-4">
+                <div className="channel-card flex-none w-[130px] h-[180px] md:w-[160px] md:h-[220px] bg-card rounded-xl border border-card-border overflow-hidden relative flex flex-col items-center justify-center p-3 md:p-4">
                   <div className="absolute top-2 right-2 z-10">
                     <span className="live-badge">LIVE</span>
                   </div>
-                  <ChannelLogo channel={channel} size="lg" className="mb-4 shadow-xl" />
-                  <h3 className="text-center font-bold text-white text-sm line-clamp-2 w-full mt-2">{channel.name}</h3>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center pb-4">
-                    <span className="text-xs font-semibold text-red-500 uppercase tracking-wider">{channel.category}</span>
+                  <ChannelLogo channel={channel} size="lg" className="mb-3 md:mb-4 shadow-xl" />
+                  <h3 className="text-center font-bold text-white text-xs md:text-sm line-clamp-2 w-full mt-1 md:mt-2">{channel.name}</h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center pb-3 md:pb-4">
+                    <span className="text-[10px] md:text-xs font-semibold text-red-500 uppercase tracking-wider">{channel.category}</span>
                   </div>
                 </div>
               </Link>
@@ -86,10 +86,10 @@ export default function CategoryRow({ title, channels, showAll = true }: Categor
         {showRightArrow && (
           <button 
             onClick={() => scroll("right")}
-            className="absolute right-0 top-0 bottom-0 w-16 z-20 flex items-center justify-center bg-gradient-to-l from-background to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity"
+            className="absolute right-0 top-0 bottom-0 w-10 md:w-16 z-20 flex items-center justify-center bg-gradient-to-l from-background to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity"
             data-testid={`scroll-right-${title}`}
           >
-            <ChevronRight className="w-8 h-8 text-white drop-shadow-lg" />
+            <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-white drop-shadow-lg" />
           </button>
         )}
       </div>
