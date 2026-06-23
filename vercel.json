@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "pnpm install",
-  "buildCommand": "PORT=5000 BASE_PATH='/' pnpm --filter @workspace/syntv build",
-  "outputDirectory": "artifacts/syntv/dist/public",
+  "buildCommand": "PORT=5000 BASE_PATH='/' pnpm --filter @workspace/syntv build && rm -rf public && cp -R artifacts/syntv/dist/public public",
+  "outputDirectory": "public",
   "rewrites": [
     {
       "source": "/(.*)",
