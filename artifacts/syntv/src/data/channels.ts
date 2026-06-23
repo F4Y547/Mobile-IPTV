@@ -20,7 +20,7 @@ export const channels: Channel[] = [
   { id: "rongeen-tv-kids", name: "Rongeen TV", category: "Kids", url: "https://server.thelegitpro.in/rongeentv/rongeentv/tracks-v1a1/mono.m3u8" },
   { id: "jungle-book", name: "Jungle Book", category: "Kids", logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdYDuOawIs57oT6PcXREjNLnVUF58DK9qrsQ&s", url: "https://cc-4bhi5osabejc9.akamaized.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-4bhi5osabejc9/junglebook.m3u8" },
   // SPORTS
-  { id: "t-sports", name: "T Sports", category: "Sports", url: "https://tvsen7.aynaott.com/tsportshd/index.m3u8" },
+  { id: "t-sports", name: "T Sports", category: "Sports", url: "http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8" },
   { id: "gazi-tv-sports", name: "Gazi TV", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Gazi%20TV.jpg", url: "http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8" },
   { id: "willow-hd", name: "Willow HD", category: "Sports", url: "https://tvsen5.aynaott.com/willowhd/index.m3u8" },
   { id: "a-sports", name: "A Sports HD", category: "Sports", url: "https://tvsen6.aynaott.com/asports/tracks-v1a1/mono.ts.m3u8" },
