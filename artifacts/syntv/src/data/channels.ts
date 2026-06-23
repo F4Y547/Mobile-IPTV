@@ -22,7 +22,7 @@ export const channels: Channel[] = [
   // SPORTS
   { id: "t-sports", name: "T Sports", category: "Sports", url: "http://198.195.239.50:8095/Tsports/tracks-v1a1/mono.m3u8" },
   { id: "gazi-tv-sports", name: "Gazi TV", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Gazi%20TV.jpg", url: "http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8" },
-  { id: "willow-hd", name: "Willow HD", category: "Sports", url: "https://tvsen5.aynaott.com/willowhd/index.m3u8" },
+  { id: "willow-hd", name: "Willow HD", category: "Sports", url: "https://tvsen5.aynaott.com/willowhd/tracks-v1a1/mono.ts.m3u8" },
   { id: "a-sports", name: "A Sports HD", category: "Sports", url: "https://tvsen6.aynaott.com/asports/tracks-v1a1/mono.ts.m3u8" },
   { id: "ptv-sports", name: "PTV Sports HD", category: "Sports", url: "https://tvsen5.aynaott.com/PtvSports/tracks-v1a1/mono.ts.m3u8" },
   { id: "star-sports-1-hd", name: "Star Sports 1 HD", category: "Sports", url: "http://103.253.18.58:8000/play/a00m" },
