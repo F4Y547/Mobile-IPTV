@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuthStore } from '../store/authStore';
 import { isOnboardingDone } from '../lib/storage';
+import { isSupabaseConfigured, supabaseConfigError } from '../lib/supabase';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 
 import SplashScreen from '../screens/SplashScreen';
@@ -37,6 +39,39 @@ const navTheme = {
   },
 };
 
+function FullScreenMessage({
+  title,
+  message,
+  showSpinner = false,
+}: {
+  title: string;
+  message: string;
+  showSpinner?: boolean;
+}) {
+  return (
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#050816' }}>
+      <StatusBar style="light" />
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 24,
+          backgroundColor: '#050816',
+        }}
+      >
+        {showSpinner && <ActivityIndicator size="large" color="#00AEEF" style={{ marginBottom: 20 }} />}
+        <Text style={{ color: '#F8FAFC', fontSize: 22, fontWeight: '800', textAlign: 'center' }}>
+          {title}
+        </Text>
+        <Text style={{ color: '#94A3B8', fontSize: 14, marginTop: 12, textAlign: 'center', lineHeight: 22 }}>
+          {message}
+        </Text>
+      </View>
+    </GestureHandlerRootView>
+  );
+}
+
 function MainStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
@@ -63,16 +98,29 @@ export default function App() {
   const { isAuthenticated, isLoading, initialize } = useAuthStore();
 
   useEffect(() => {
-    const timer = setTimeout(() => setStartupTimeout(true), 8000);
-    Promise.race([
-      initialize(),
-      new Promise<void>((_, reject) => setTimeout(() => reject(new Error('Auth init timed out')), 7000)),
-    ]).catch(() => {});
-    isOnboardingDone().then((done) => {
-      if (done) setAppState('app');
-    });
-    return () => clearTimeout(timer);
-  }, []);
+    const startupTimer = setTimeout(() => setStartupTimeout(true), 8000);
+
+    async function bootstrap() {
+      try {
+        await Promise.race([
+          initialize(),
+          new Promise<void>((_, reject) => setTimeout(() => reject(new Error('Auth init timed out')), 7000)),
+        ]);
+      } catch (error) {
+        console.warn('App bootstrap warning:', error);
+      }
+
+      try {
+        const done = await isOnboardingDone();
+        if (done) setAppState('app');
+      } catch (error) {
+        console.warn('Onboarding check failed:', error);
+      }
+    }
+
+    bootstrap();
+    return () => clearTimeout(startupTimer);
+  }, [initialize]);
 
   if (appState === 'splash') {
     return (
@@ -92,17 +140,30 @@ export default function App() {
     );
   }
 
+  if (!isSupabaseConfigured) {
+    return (
+      <ErrorBoundary>
+        <FullScreenMessage
+          title="SYNTV Online setup required"
+          message={supabaseConfigError}
+        />
+      </ErrorBoundary>
+    );
+  }
+
   if (isLoading && !startupTimeout) {
     return (
-      <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#050816' }}>
-        <StatusBar style="light" />
-      </GestureHandlerRootView>
+      <FullScreenMessage
+        title="Loading SYNTV Online"
+        message="Preparing your IPTV workspace..."
+        showSpinner
+      />
     );
   }
 
   return (
     <ErrorBoundary>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#050816' }}>
         <SafeAreaProvider>
           <StatusBar style="light" />
           <NavigationContainer theme={navTheme}>
