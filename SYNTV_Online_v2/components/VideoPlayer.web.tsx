@@ -1,5 +1,5 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Dimensions, StatusBar } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { usePlayerStore } from '../store/playerStore';
@@ -12,33 +12,37 @@ interface Props {
   onPrev?: () => void;
 }
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
 export default function VideoPlayer({ streamUrl, channelName, onNext, onPrev }: Props) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const controlsTimer = useRef<NodeJS.Timeout | null>(null);
+  const videoRef = useRef<any>(null);
+  const controlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
-    isPlaying, isFullscreen, isMuted, isLoading, hasError, errorMessage,
-    play, pause, togglePlay, setFullscreen, toggleFullscreen, setMuted,
-    setLoading, setError, clearError, reset,
+    isPlaying, isMuted, isLoading, hasError, errorMessage,
+    play, pause, togglePlay, setMuted, setLoading,
+    setError, clearError, reset,
   } = usePlayerStore();
 
   const [showControls, setShowControls] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    return () => reset();
-  }, [streamUrl]);
+    return () => {
+      if (controlsTimer.current) clearTimeout(controlsTimer.current);
+      reset();
+    };
+  }, [streamUrl, reset]);
 
   useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    if (isPlaying) el.play().catch(() => {});
-    else el.pause();
-  }, [isPlaying]);
+    const video = videoRef.current;
+    if (!video) return;
 
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.muted = isMuted;
-  }, [isMuted]);
+    if (isPlaying) {
+      const playPromise = video.play?.();
+      if (playPromise?.catch) playPromise.catch(() => pause());
+    } else {
+      video.pause?.();
+    }
+  }, [isPlaying, pause]);
 
   const showControlsForAWhile = useCallback(() => {
     setShowControls(true);
@@ -59,76 +63,86 @@ export default function VideoPlayer({ streamUrl, channelName, onNext, onPrev }: 
   const handleRetry = () => {
     clearError();
     setLoading(true);
+    const video = videoRef.current;
+    if (video) {
+      video.load?.();
+      video.play?.().catch?.(() => {});
+    }
   };
+
+  const progressPercent = duration > 0 ? Math.min((currentTime / duration) * 100, 100) : 0;
 
   return (
     <TouchableOpacity
       activeOpacity={1}
       onPress={showControlsForAWhile}
-      className={isFullscreen ? 'flex-1 bg-black' : 'h-[280px]'}
+      style={{ height: 280, backgroundColor: '#000', overflow: 'hidden' }}
     >
-      <StatusBar hidden={isFullscreen} />
+      <StatusBar hidden />
 
-      <video
-        ref={videoRef}
-        src={streamUrl}
-        style={{ flex: 1, objectFit: 'contain' }}
-        autoPlay
-        playsInline
-        onCanPlay={handleLoad}
-        onError={handleError}
-      />
+      {React.createElement('video' as any, {
+        ref: videoRef,
+        src: streamUrl,
+        muted: isMuted,
+        controls: false,
+        playsInline: true,
+        style: {
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#000',
+          objectFit: 'contain',
+        },
+        onCanPlay: handleLoad,
+        onWaiting: () => setLoading(true),
+        onPlaying: () => setLoading(false),
+        onError: handleError,
+        onTimeUpdate: (event: any) => setCurrentTime(event.currentTarget?.currentTime || 0),
+        onLoadedMetadata: (event: any) => setDuration(event.currentTarget?.duration || 0),
+      })}
 
       {isLoading && (
-        <View className="absolute inset-0 items-center justify-center bg-black/60">
-          <View className="w-12 h-12 rounded-full border-3 border-[#00AEEF] border-t-transparent" style={{ borderWidth: 3 }} />
-          <Text className="text-[#94A3B8] text-sm mt-3">Loading stream...</Text>
+        <View style={{ position: 'absolute', inset: 0 as any, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)' }}>
+          <View style={{ width: 48, height: 48, borderRadius: 24, borderWidth: 3, borderColor: '#00AEEF' }} />
+          <Text style={{ color: '#94A3B8', fontSize: 14, marginTop: 12 }}>Loading stream...</Text>
         </View>
       )}
 
       {hasError && (
-        <View className="absolute inset-0 items-center justify-center bg-black/80 px-8">
-          <View className="w-20 h-20 rounded-full bg-red-500/10 items-center justify-center mb-4">
+        <View style={{ position: 'absolute', inset: 0 as any, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.82)', paddingHorizontal: 32 }}>
+          <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(239,68,68,0.1)', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
             <Ionicons name="alert-circle" size={48} color="#EF4444" />
           </View>
-          <Text className="text-white text-lg font-bold text-center">{errorMessage || 'Stream Currently Unavailable'}</Text>
-          <Text className="text-[#94A3B8] text-sm text-center mt-2 px-4">
+          <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700', textAlign: 'center' }}>{errorMessage || 'Stream Currently Unavailable'}</Text>
+          <Text style={{ color: '#94A3B8', fontSize: 14, textAlign: 'center', marginTop: 8 }}>
             The stream may be offline or the playlist may need to be refreshed.
           </Text>
           <TouchableOpacity
-            className="flex-row items-center bg-[#00AEEF] px-6 py-3 rounded-full mt-5"
+            style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#00AEEF', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 999, marginTop: 20 }}
             onPress={handleRetry}
           >
             <Ionicons name="refresh" size={18} color="#fff" />
-            <Text className="text-white font-bold ml-2">Retry</Text>
+            <Text style={{ color: '#fff', fontWeight: '700', marginLeft: 8 }}>Retry</Text>
           </TouchableOpacity>
         </View>
       )}
 
       {showControls && !hasError && (
-        <View className="absolute inset-0 justify-end">
-          <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)']} className="flex-1 justify-between px-4 py-6">
-            <View className="flex-row items-center pt-10 gap-3">
-              {isFullscreen && (
-                <TouchableOpacity onPress={toggleFullscreen}>
-                  <Ionicons name="chevron-down" size={28} color="#fff" />
-                </TouchableOpacity>
-              )}
+        <View style={{ position: 'absolute', inset: 0 as any, justifyContent: 'flex-end' }}>
+          <LinearGradient colors={['transparent', 'rgba(0,0,0,0.86)']} style={{ flex: 1, justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 24 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 40, gap: 12 }}>
               {channelName && (
-                <View className="flex-row items-center flex-1 gap-2.5">
-                  <Text className="text-white font-bold text-base" numberOfLines={1}>{channelName}</Text>
-                </View>
+                <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16, flex: 1 }} numberOfLines={1}>{channelName}</Text>
               )}
             </View>
 
-            <View className="flex-row items-center justify-center gap-10">
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 40 }}>
               {onPrev && (
                 <TouchableOpacity onPress={onPrev}>
                   <Ionicons name="play-skip-back" size={26} color="#fff" />
                 </TouchableOpacity>
               )}
               <TouchableOpacity
-                className="w-14 h-14 rounded-full bg-[#00AEEF] items-center justify-center"
+                style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: '#00AEEF', alignItems: 'center', justifyContent: 'center' }}
                 onPress={togglePlay}
               >
                 <Ionicons name={isPlaying ? 'pause' : 'play'} size={32} color="#fff" style={{ marginLeft: isPlaying ? 0 : 3 }} />
@@ -140,16 +154,13 @@ export default function VideoPlayer({ streamUrl, channelName, onNext, onPrev }: 
               )}
             </View>
 
-            <View className="flex-row items-center gap-4 pb-2">
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16, paddingBottom: 8 }}>
               <TouchableOpacity onPress={() => setMuted(!isMuted)}>
                 <Ionicons name={isMuted ? 'volume-mute' : 'volume-high'} size={22} color="#fff" />
               </TouchableOpacity>
-              <View className="flex-1 h-1 bg-white/20 rounded-full">
-                <View className="w-[35%] h-full bg-[#00AEEF] rounded-full" />
+              <View style={{ flex: 1, height: 4, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 999 }}>
+                <View style={{ width: `${progressPercent}%`, height: '100%', backgroundColor: '#00AEEF', borderRadius: 999 }} />
               </View>
-              <TouchableOpacity onPress={toggleFullscreen}>
-                <Ionicons name={isFullscreen ? 'contract' : 'expand'} size={22} color="#fff" />
-              </TouchableOpacity>
             </View>
           </LinearGradient>
         </View>
