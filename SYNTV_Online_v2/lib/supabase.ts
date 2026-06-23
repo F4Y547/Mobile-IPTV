@@ -4,8 +4,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import webStorage from './webStorage';
 import { Playlist, WatchHistory } from '../types';
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+const rawSupabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+const rawSupabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+
+export const isSupabaseConfigured = Boolean(rawSupabaseUrl && rawSupabaseAnonKey);
+export const supabaseConfigError =
+  'Supabase environment variables are missing. Please configure EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in Vercel.';
+
+const supabaseUrl = rawSupabaseUrl || 'https://placeholder.supabase.co';
+const supabaseAnonKey = rawSupabaseAnonKey || 'placeholder-anon-key';
 
 const storage = Platform.OS === 'web' ? {
   getItem: webStorage.getItem,
@@ -13,8 +20,14 @@ const storage = Platform.OS === 'web' ? {
   removeItem: webStorage.removeItem,
 } : AsyncStorage;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY env vars');
+if (!isSupabaseConfigured) {
+  console.warn(supabaseConfigError);
+}
+
+function assertSupabaseConfigured() {
+  if (!isSupabaseConfigured) {
+    throw new Error(supabaseConfigError);
+  }
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
@@ -27,6 +40,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 });
 
 export async function signUp(email: string, password: string, fullName: string) {
+  assertSupabaseConfigured();
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
@@ -37,22 +51,26 @@ export async function signUp(email: string, password: string, fullName: string) 
 }
 
 export async function signIn(email: string, password: string) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
   return data;
 }
 
 export async function signOut() {
+  assertSupabaseConfigured();
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }
 
 export async function getCurrentUser() {
+  if (!isSupabaseConfigured) return null;
   const { data: { user } } = await supabase.auth.getUser();
   return user;
 }
 
 export async function getUserProfile(userId: string) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase
     .from('user_profiles')
     .select('*')
@@ -63,12 +81,14 @@ export async function getUserProfile(userId: string) {
 }
 
 export async function savePlaylist(playlist: Omit<Playlist, 'id' | 'created_at'>) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase.from('playlists').insert(playlist).select().single();
   if (error) throw error;
   return data;
 }
 
 export async function getUserPlaylists(userId: string) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase
     .from('playlists')
     .select('*')
@@ -79,12 +99,14 @@ export async function getUserPlaylists(userId: string) {
 }
 
 export async function saveChannels(channels: any[]) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase.from('channels').insert(channels).select();
   if (error) throw error;
   return data;
 }
 
 export async function getChannels(playlistId: string, page = 0, limit = 50) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase
     .from('channels')
     .select('*')
@@ -96,6 +118,7 @@ export async function getChannels(playlistId: string, page = 0, limit = 50) {
 }
 
 export async function searchChannels(playlistId: string, query: string, limit = 20) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase
     .from('channels')
     .select('*')
@@ -107,6 +130,7 @@ export async function searchChannels(playlistId: string, query: string, limit = 
 }
 
 export async function getFavorites(userId: string) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase
     .from('favorites')
     .select('*')
@@ -116,6 +140,7 @@ export async function getFavorites(userId: string) {
 }
 
 export async function getFavoriteChannels(userId: string) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase
     .from('favorites')
     .select('content_id')
@@ -126,6 +151,7 @@ export async function getFavoriteChannels(userId: string) {
 }
 
 export async function getFavoriteChannelsFull(userId: string) {
+  assertSupabaseConfigured();
   const ids = await getFavoriteChannels(userId);
   if (ids.length === 0) return [];
   const { data, error } = await supabase
@@ -137,6 +163,7 @@ export async function getFavoriteChannelsFull(userId: string) {
 }
 
 export async function isChannelFavorite(userId: string, channelId: string): Promise<boolean> {
+  assertSupabaseConfigured();
   const { data, error } = await supabase
     .from('favorites')
     .select('id')
@@ -149,6 +176,7 @@ export async function isChannelFavorite(userId: string, channelId: string): Prom
 }
 
 export async function toggleFavoriteChannel(userId: string, channelId: string): Promise<boolean> {
+  assertSupabaseConfigured();
   const { data: existing, error: findError } = await supabase
     .from('favorites')
     .select('id')
@@ -180,12 +208,14 @@ export async function toggleFavoriteChannel(userId: string, channelId: string): 
 }
 
 export async function saveWatchHistory(entry: Omit<WatchHistory, 'id'>) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase.from('watch_history').insert(entry).select().single();
   if (error) throw error;
   return data;
 }
 
 export async function getWatchHistory(userId: string, limit = 20) {
+  assertSupabaseConfigured();
   const { data, error } = await supabase
     .from('watch_history')
     .select('*')
