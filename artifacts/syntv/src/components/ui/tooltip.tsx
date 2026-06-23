@@ -1,32 +1,103 @@
 "use client"
 
 import * as React from "react"
-import * as TooltipPrimitive from "@radix-ui/react-tooltip"
+import { Slot } from "@radix-ui/react-slot"
 
 import { cn } from "@/lib/utils"
 
-const TooltipProvider = TooltipPrimitive.Provider
+type TooltipProviderProps = React.PropsWithChildren<{
+  delayDuration?: number
+  skipDelayDuration?: number
+  disableHoverableContent?: boolean
+}>
 
-const Tooltip = TooltipPrimitive.Root
+function TooltipProvider({ children }: TooltipProviderProps) {
+  return <>{children}</>
+}
 
-const TooltipTrigger = TooltipPrimitive.Trigger
-
-const TooltipContent = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <TooltipPrimitive.Portal>
-    <TooltipPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn(
-        "z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-tooltip-content-transform-origin]",
-        className
-      )}
+function Tooltip({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="tooltip"
+      className={cn("group/tooltip relative inline-flex", className)}
       {...props}
     />
-  </TooltipPrimitive.Portal>
-))
-TooltipContent.displayName = TooltipPrimitive.Content.displayName
+  )
+}
+
+type TooltipTriggerProps = React.ComponentProps<"span"> & {
+  asChild?: boolean
+}
+
+function TooltipTrigger({ asChild = false, ...props }: TooltipTriggerProps) {
+  const Comp = asChild ? Slot : "span"
+
+  return <Comp data-slot="tooltip-trigger" {...props} />
+}
+
+type TooltipContentProps = React.ComponentProps<"div"> & {
+  side?: "top" | "right" | "bottom" | "left"
+  align?: "start" | "center" | "end"
+  sideOffset?: number
+}
+
+const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
+  (
+    {
+      className,
+      side = "top",
+      align = "center",
+      sideOffset = 4,
+      hidden,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    if (hidden) {
+      return null
+    }
+
+    const sideClasses = {
+      top: "bottom-full left-1/2 -translate-x-1/2 mb-[var(--tooltip-offset)]",
+      right: "left-full top-1/2 -translate-y-1/2 ml-[var(--tooltip-offset)]",
+      bottom: "top-full left-1/2 -translate-x-1/2 mt-[var(--tooltip-offset)]",
+      left: "right-full top-1/2 -translate-y-1/2 mr-[var(--tooltip-offset)]",
+    }
+
+    const alignClasses =
+      side === "top" || side === "bottom"
+        ? {
+            start: "left-0 translate-x-0",
+            center: "left-1/2 -translate-x-1/2",
+            end: "left-auto right-0 translate-x-0",
+          }[align]
+        : {
+            start: "top-0 translate-y-0",
+            center: "top-1/2 -translate-y-1/2",
+            end: "bottom-0 top-auto translate-y-0",
+          }[align]
+
+    return (
+      <div
+        ref={ref}
+        data-slot="tooltip-content"
+        role="tooltip"
+        style={{
+          "--tooltip-offset": `${sideOffset}px`,
+          ...style,
+        } as React.CSSProperties}
+        className={cn(
+          "pointer-events-none absolute z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs whitespace-nowrap text-primary-foreground opacity-0 shadow-md transition-opacity group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100",
+          sideClasses[side],
+          alignClasses,
+          className
+        )}
+        {...props}
+      />
+    )
+  }
+)
+TooltipContent.displayName = "TooltipContent"
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
