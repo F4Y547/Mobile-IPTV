@@ -22,7 +22,7 @@ export const channels: Channel[] = [
   // SPORTS
   { id: "t-sports", name: "T Sports", category: "Sports", url: "http://198.195.239.50:8095/Tsports/tracks-v1a1/mono.m3u8" },
   { id: "gazi-tv-sports", name: "Gazi TV", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Gazi%20TV.jpg", url: "http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8" },
-  { id: "willow-hd", name: "Willow HD", category: "Sports", url: "https://tvsen5.aynaott.com/willowhd/tracks-v1a1/mono.ts.m3u8" },
+  { id: "willow-hd", name: "Willow HD", category: "Sports", url: "https://tvsen5.aynaott.com/willowhd/index.m3u8" },
   { id: "a-sports", name: "A Sports HD", category: "Sports", url: "https://tvsen6.aynaott.com/asports/tracks-v1a1/mono.ts.m3u8" },
   { id: "ptv-sports", name: "PTV Sports HD", category: "Sports", url: "https://tvsen5.aynaott.com/PtvSports/tracks-v1a1/mono.ts.m3u8" },
   { id: "star-sports-1-hd", name: "Star Sports 1 HD", category: "Sports", url: "http://103.253.18.58:8000/play/a00m" },
@@ -30,7 +30,7 @@ export const channels: Channel[] = [
   { id: "star-sports-2-hindi", name: "Star Sports 2 Hindi HD", category: "Sports", url: "http://103.157.248.140:8000/play/a01m/index.m3u8" },
   { id: "sony-sports-ten-3", name: "Sony Sports Ten 3 HD", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/56e54462053b1b278b80b532c89c01f17e360fd5/Sony%20Sports%20Ten%203.png", url: "http://103.99.249.139/sonyten3/index.m3u8" },
   { id: "sony-sports-ten-5", name: "Sony Sports Ten 5", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/56e54462053b1b278b80b532c89c01f17e360fd5/Sony%20Sports%20Ten%205.png", url: "http://103.99.249.139/sonyten3/index.m3u8" },
-  { id: "dd-sports", name: "DD Sports", category: "Sports", url: "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index.m3u8" },
+  { id: "dd-sports", name: "DD Sports", category: "Sports", url: "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index_3.m3u8" },
   { id: "fifa-plus", name: "FIFA+", category: "Sports", url: "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8" },
   { id: "fifa-french", name: "FIFA+ French", category: "Sports", url: "https://37b4c228.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblWZyX0ZJRkFQbHVzRnJlbmNoX0hMUw/playlist.m3u8" },
   { id: "fifa-usa", name: "FIFA+ USA", category: "Sports", url: "https://d2w9q46ikgrcwx.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-of5cbk3sav3w5/v1/sysdata_s_p_a_fifa_7/samsungheadend_us/latest/main/hls/playlist.m3u8" },
