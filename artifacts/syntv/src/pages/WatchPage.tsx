@@ -1,0 +1,117 @@
+import { useEffect, useRef, useState } from "react";
+import { useParams, Link } from "wouter";
+import Navbar from "@/components/Navbar";
+import { channels } from "@/data/channels";
+import HlsPlayer from "@/components/HlsPlayer";
+import ChannelLogo from "@/components/ChannelLogo";
+import { usePlayer } from "@/context/PlayerContext";
+import NotFound from "./not-found";
+import { Play } from "lucide-react";
+
+export default function WatchPage() {
+  const { channelId } = useParams();
+  const { playChannel } = usePlayer();
+  const playerWrapperRef = useRef<HTMLDivElement>(null);
+  const [playerVisible, setPlayerVisible] = useState(true);
+
+  const channel = channels.find(c => c.id === channelId);
+
+  useEffect(() => {
+    if (channel) {
+      playChannel(channel);
+    }
+  }, [channel, playChannel]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setPlayerVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (playerWrapperRef.current) {
+      observer.observe(playerWrapperRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  if (!channel) {
+    return <NotFound />;
+  }
+
+  const relatedChannels = channels.filter(c => c.category === channel.category && c.id !== channel.id);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      
+      <div className="max-w-[1600px] mx-auto p-4 md:p-8 flex flex-col lg:flex-row gap-8">
+        <div className="flex-1 min-w-0">
+          <div 
+            ref={playerWrapperRef}
+            className="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800 relative z-10"
+          >
+            {/* The main player */}
+            <HlsPlayer url={channel.url} channel={channel} />
+          </div>
+
+          <div className="mt-8 flex items-start gap-6">
+            <ChannelLogo channel={channel} size="lg" className="shrink-0 shadow-lg" />
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold text-white">{channel.name}</h1>
+                <span className="live-badge">LIVE</span>
+              </div>
+              <span className="inline-block px-3 py-1 bg-zinc-800 text-zinc-300 text-sm font-semibold rounded mb-4">
+                {channel.category}
+              </span>
+              <p className="text-zinc-400 max-w-2xl leading-relaxed">
+                Currently streaming {channel.name} live on SYNTV Online. Enjoy premium quality content without interruptions. 
+                Experience the best in {channel.category.toLowerCase()} entertainment.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Sidebar */}
+        <div className="w-full lg:w-96 shrink-0">
+          <h3 className="text-xl font-bold text-white mb-4 pl-2 border-l-4 border-red-600">More {channel.category}</h3>
+          <div className="bg-card rounded-xl border border-card-border overflow-hidden">
+            <div className="flex flex-col max-h-[800px] overflow-y-auto scrollbar-hide">
+              {relatedChannels.map(rc => (
+                <Link key={rc.id} href={`/watch/${rc.id}`}>
+                  <div className="flex items-center gap-4 p-4 hover:bg-zinc-800/50 cursor-pointer transition border-b border-zinc-800/50 last:border-0 group">
+                    <div className="relative">
+                      <ChannelLogo channel={rc} size="sm" />
+                      <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                        <Play className="w-4 h-4 text-white fill-current" />
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-white font-semibold truncate group-hover:text-red-500 transition">{rc.name}</h4>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky Mini Player when scrolled out of view */}
+      {!playerVisible && (
+        <div className="mini-player-container shadow-2xl border border-zinc-800 animate-in fade-in slide-in-from-bottom-8">
+          <div className="w-full h-[180px] bg-black">
+            <HlsPlayer url={channel.url} channel={channel} isMini={true} />
+          </div>
+          <div className="px-3 py-2 bg-zinc-900 border-t border-zinc-800 truncate flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-sm font-medium text-white truncate">{channel.name}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

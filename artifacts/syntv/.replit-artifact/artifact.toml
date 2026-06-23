@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "SYNTV Online"
+version = "1.0.0"
+id = "artifacts/syntv"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22505
+
+[services.development]
+run = "pnpm --filter @workspace/syntv run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/syntv", "run", "build" ]
+publicDir = "artifacts/syntv/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22505"
+BASE_PATH = "/"

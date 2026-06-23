@@ -1,0 +1,693 @@
+KIDS:
+Channel: Gopal Bhar
+Group: Cartoons | 24/7
+URL: https://live20.bozztv.com/giatvplayout7/giatv-209611/tracks-v1a1/mono.ts.m3u8
+------------------------------------------------------------
+Channel: Motu Patlu
+Group: Cartoons | 24/7
+URL: https://live20.bozztv.com/giatvplayout7/giatv-209622/tracks-v1a1/mono.ts.m3u8
+------------------------------------------------------------
+Channel: Doraemon
+Group: Bangla | 24/7
+URL: https://live20.bozztv.com/giatvplayout7/giatv-209902/tracks-v1a1/mono.ts.m3u8
+------------------------------------------------------------
+Channel: ZB Cartoon
+Group: Kids
+URL: https://server.zillarbarta.com/zbcatun/tracks-v1a1/mono.ts.m3u8
+------------------------------------------------------------
+Channel: Tom & Jarry
+Group: KIDS
+URL: https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8
+------------------------------------------------------------
+Cartoon Network
+Group: Kids
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://live20.bozztv.com/giatvplayout7/giatv-209624/index.m3u8
+--------------------------------------------------------------------------------
+Zoo Moo
+Group: KIDS
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://amg01553-blueantmediaasi-zoomoonz-samsungnz-rdufn.amagi.tv/playlist/amg01553-blueantmediaasi-zoomoonz-samsungnz/playlist.m3u8
+--------------------------------------------------------------------------------
+Rongeen TV
+Group: KIDS
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://server.thelegitpro.in/rongeentv/rongeentv/tracks-v1a1/mono.m3u8
+--------------------------------------------------------------------------------
+Jungle Book
+Group: KIDS
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdYDuOawIs57oT6PcXREjNLnVUF58DK9qrsQ&s
+URL: https://cc-4bhi5osabejc9.akamaized.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-4bhi5osabejc9/junglebook.m3u8
+--------------------------------------------------------------------------------
+
+SPORTS:
+Channel: T Sports (720p)
+Country: Unknown
+Group: Sports
+URL: https://tvsen7.aynaott.com/tsportshd/index.m3u8
+----------------------------------------------------------------------
+Gazi TV
+Group: Bangla
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Gazi%20TV.jpg
+URL: http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8
+--------------------------------------------------------------------------------
+Willow HD 🇺🇸
+Group: Cricket 🏏
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://tvsen5.aynaott.com/willowhd/index.m3u8
+--------------------------------------------------------------------------------
+A Sports HD 🇵🇰
+Group: Cricket 🏏
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://tvsen6.aynaott.com/asports/tracks-v1a1/mono.ts.m3u8
+--------------------------------------------------------------------------------
+PTV Sports HD 🇵🇰
+Group: Cricket 🏏
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://tvsen5.aynaott.com/PtvSports/tracks-v1a1/mono.ts.m3u8
+--------------------------------------------------------------------------------
+Channel: Star Sports 1 HD (1080p)
+Country: Unknown
+Group: Sports
+URL: http://103.253.18.58:8000/play/a00m
+----------------------------------------------------------------------
+Channel: Star Sports 1 Hindi (576p)
+Country: Unknown
+Group: Sports
+URL: http://103.253.18.58:8000/play/a03o
+----------------------------------------------------------------------
+Channel: Star Sports 2 Hindi HD (1080p)
+Country: Unknown
+Group: Sports
+URL: http://103.157.248.140:8000/play/a01m/index.m3u8
+----------------------------------------------------------------------
+Sony Sports Ten 3 HD
+Group: Sports
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://raw.githubusercontent.com/subirkumarpaul/Logo/56e54462053b1b278b80b532c89c01f17e360fd5/Sony%20Sports%20Ten%203.png
+URL: http://103.99.249.139/sonyten3/index.m3u8
+--------------------------------------------------------------------------------
+Sony Sports Ten 5
+Group: Sports
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://raw.githubusercontent.com/subirkumarpaul/Logo/56e54462053b1b278b80b532c89c01f17e360fd5/Sony%20Sports%20Ten%205.png
+URL: http://103.99.249.139/sonyten3/index.m3u8
+--------------------------------------------------------------------------------
+DD Sports 2.0
+Group: Sports
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index.m3u8
+--------------------------------------------------------------------------------
+Channel: FIFA+ (720p)
+Country: Unknown
+Group: Sports
+URL: https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8
+----------------------------------------------------------------------
+Channel: FIFA+ French (720p)
+Country: Unknown
+Group: Sports
+URL: https://37b4c228.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWZyX0ZJRkFQbHVzRnJlbmNoX0hMUw/playlist.m3u8
+----------------------------------------------------------------------
+Channel: FIFA+ German (720p)
+Country: Unknown
+Group: Sports
+URL: https://4397879b.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWRlX0ZJRkFQbHVzR2VybWFuX0hMUw/playlist.m3u8
+----------------------------------------------------------------------
+Channel: FIFA+ Hispanic America (720p)
+Country: Unknown
+Group: Sports
+URL: https://6c849fb3.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctbXhfRklGQVBsdXNTcGFuaXNoLTFfSExT/playlist.m3u8
+----------------------------------------------------------------------
+Channel: FIFA+ Italy (720p)
+Country: Unknown
+Group: Sports
+URL: https://5d95f7d7.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWl0X0ZJRkFQbHVzSXRhbGlhbl9ITFM/playlist.m3u8
+----------------------------------------------------------------------
+Channel: FIFA+ Portuguese (720p)
+Country: Unknown
+Group: Sports
+URL: https://e3be9ac5.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctYnJfRklGQVBsdXNQb3J0dWd1ZXNlX0hMUw/playlist.m3u8
+----------------------------------------------------------------------
+Channel: FIFA+ Spain (720p)
+Country: Unknown
+Group: Sports
+URL: https://d63fabad.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWVzX0ZJRkFQbHVzU3BhbmlzaF9ITFM/playlist.m3u8
+----------------------------------------------------------------------
+Channel: FIFA+ United States (720p)
+Country: Unknown
+Group: Sports
+URL: https://d2w9q46ikgrcwx.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-of5cbk3sav3w5/v1/sysdata_s_p_a_fifa_7/samsungheadend_us/latest/main/hls/playlist.m3u8
+----------------------------------------------------------------------
+Channel: FIFA+ Women (720p)
+Country: Unknown
+Group: Sports
+URL: https://cffda8ff.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1nYl9GSUZBUGx1c3dvbWVuX0hMUw/playlist.m3u8
+----------------------------------------------------------------------
+
+DOCUMENTRY:
+Discovery Bangla
+Group: Information
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Discovery%20.png
+URL: http://202.70.146.135:8000/play/a05z/index.m3u8
+--------------------------------------------------------------------------------
+Discover Pakistan TV
+Group: Information
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/discoverpakistan.stream/playlist.m3u8
+--------------------------------------------------------------------------------
+Nat Geo HD
+Group: Information
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://raw.githubusercontent.com/subirkumarpaul/Logo/main/National%20Geographic%20Channel.png
+URL: http://202.70.146.135:8000/play/a05o/index.m3u8
+--------------------------------------------------------------------------------
+Wild Earth
+Group: Documentary
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://wildearth-plex.amagi.tv/master.m3u8
+--------------------------------------------------------------------------------
+OUTDOOR CHANNEL 🇺🇸
+Group: Documentary
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://i.ibb.co/jZ2NVqN/outdoorch.png
+URL: https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg00718-outdoorchannela-outdoortvnz-samsungnz/playlist.m3u8
+--------------------------------------------------------------------------------
+REAL WILD 🇬🇧
+Group: Documentary
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://i.ibb.co/sRhcqHT/realwild.png
+URL: https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg00426-littledotstudio-realwild-tcl/playlist.m3u8
+--------------------------------------------------------------------------------
+INSIGHT
+Group: Documentary
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://business.insight.tv/wp-content/uploads/7521/01/Insight-TV-Logo-small-150x150.png
+URL: https://insighttv-samsung-us.amagi.tv/playlist.m3u8
+--------------------------------------------------------------------------------
+TravelXP
+Group: Documentary
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://img.lovepik.com/photo/50044/4947.jpg_wh300.jpg
+URL: https://travelxp-travelxp-1-eu.rakuten.wurl.tv/playlist.m3u8
+--------------------------------------------------------------------------------
+Food Food
+Group: Information
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: http://103.175.73.12:8080/live/143/143_0.m3u8
+--------------------------------------------------------------------------------
+CGTN Docment
+Group: Information
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://english-livebkali.cgtn.com/live/doccgtn_1.m3u8
+--------------------------------------------------------------------------------
+
+ENTERTAINMENT:
+Channel: Bangla Vision
+Group: Entertainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8
+------------------------------------------------------------
+Channel: NTV
+Group: Entertainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8
+------------------------------------------------------------
+Channel: Boishakhi TV
+Group: Bangladesh
+URL: https://boishakhi.sonarbanglatv.com/boishakhi/boishakhitv/index.m3u8
+------------------------------------------------------------
+Channel: Maasranga TV
+Group: Entertainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8
+------------------------------------------------------------
+Channel: Gazi TV (1080p)
+Group: Bangladesh
+URL: http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8
+------------------------------------------------------------
+Channel: Ekushey TV
+Group: Akash Go
+URL: http://210.4.72.204/hls-live/livepkgr/_definst_/liveevent/livestream3.m3u8
+------------------------------------------------------------
+ATN BANGLA
+Group: Live Tv
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8
+--------------------------------------------------------------------------------
+Channel: MY TV
+Group: Bangla
+URL: https://mytvbangla.com/0.m3u8
+------------------------------------------------------------
+Channel: MAASRANGA HD
+Group: Bangla
+URL: http://mtv.sunplex.live/MAASRANGA-TV/index.m3u8
+------------------------------------------------------------
+Channel: Deshi TV (720p)
+Group: Bangladesh
+URL: https://deshitv.deshitv24.net/live/myStream/playlist.m3u8
+------------------------------------------------------------
+Channel: BTV
+Group: Entertainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8
+------------------------------------------------------------
+Durronto TV
+Group: Live Tv
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/duronto.stream/tracks-v1a1/mono.m3u8
+--------------------------------------------------------------------------------
+Channel 9
+Group: Live Tv
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/1729-audio_113592_eng=113200-video=2202800.m3u8
+--------------------------------------------------------------------------------
+SA TV
+Group: Live Tv
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/1720-audio_113502_eng=113200-video=3224800.m3u8
+--------------------------------------------------------------------------------
+Channel: Green TV (1080p)
+Group: Bangladesh
+URL: https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/greentv.stream/live-orgin/greentv.stream/playlist.m3u8
+------------------------------------------------------------
+Channel: Drama 24
+Group: Bangla
+URL: https://vods2.aynascope.net/gseriesDrama/index.m3u8
+------------------------------------------------------------
+Channel: G Series Drama
+Group: Bangladesh
+URL: https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8
+------------------------------------------------------------
+Channel: Rongeen TV
+Group: Bangladesh
+URL: https://server.thelegitpro.in/rongeentv/rongeentv/tracks-v1a1/mono.m3u8
+------------------------------------------------------------
+Channel: Channel S
+Group: Bangla
+URL: https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/chsukoff.stream/playlist.m3u8
+------------------------------------------------------------
+Channel: NK
+Group: Bangladesh
+URL: https://amg01218-republictvfast-amg01218c1-samsung-in-1918.playouts.now.amagi.tv/playlist/amg01218-republictvfast-rbangla-samsungin/playlist.m3u8
+------------------------------------------------------------
+Channel: AAKASH AATH
+Group: Bangladesh
+URL: https://cdn-4.pishow.tv/live/969/master.m3u8
+------------------------------------------------------------
+Channel: Channel-16
+Group: Bangladesh
+URL: https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/channel16bd.stream/tracks-v1a1/mono.m3u8
+------------------------------------------------------------
+Channel: Deepto TV HD
+Group: Entertainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8
+------------------------------------------------------------
+Channel: Channel 9 HD
+Group: Entertainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8
+------------------------------------------------------------
+Channel: Channel I HD
+Group: Entertainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8
+------------------------------------------------------------
+
+NEWS:
+Channel: Jamuna TV
+Group: News
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8
+------------------------------------------------------------
+Channel: Somoy TV
+Group: News
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8
+------------------------------------------------------------
+Channel: Ekattor HD
+Group: News
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8
+------------------------------------------------------------
+Channel: Channel 24 HD
+Group: News
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8
+------------------------------------------------------------
+Channel: ATN News
+Group: News
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8
+------------------------------------------------------------
+Channel: Independent TV
+Group: News
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8
+------------------------------------------------------------
+Channel: News 24 HD
+Group: News
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8
+------------------------------------------------------------
+Channel: DBC News HD
+Group: News
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8
+------------------------------------------------------------
+Channel: Ekhon TV
+Group: News
+URL: https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/globaltv.stream/tracks-v1a1/mono.m3u8
+------------------------------------------------------------
+
+Bangla Religious:
+Peace TV Bangla
+Group: Relagion Channel
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://i.ibb.co/Gfw89mC/20240804-033102.png
+URL: https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v2a1/mono.m3u8
+--------------------------------------------------------------------------------
+Makka live
+Group: Islamic
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8
+--------------------------------------------------------------------------------
+Madina live
+Group: ISLAMIC CHANNELS
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://images-na.ssl-images-amazon.com/images/I/71CywdrFaZL.png
+URL: https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8
+--------------------------------------------------------------------------------
+Saudi Quran
+Group: ISLAMIC CHANNELS
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8
+--------------------------------------------------------------------------------
+Channel: WAZ TV
+Group: Bangladesh
+URL: https://tplay.live/originals/ilm-tv/index.m3u8
+------------------------------------------------------------
+Channel: Azan TV
+Group: Religious
+URL: https://dbcanada.sonarbanglatv.com/azantv/atv/index.m3u8
+------------------------------------------------------------
+Channel: Peace TV Bangla
+Group: Religious
+URL: https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v3a1/mono.m3u8?sid=s7AaNdTzDE2912wNcPLejQ
+------------------------------------------------------------
+Channel: Madani Tv
+Group: Religious
+URL: https://streaming.madanichannel.tv/static/streaming-playlists/hls/d3e49b76-ac06-4689-a641-9200445b647f/master.m3u8
+------------------------------------------------------------
+Channel: Islamic TV
+Group: Infotainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8
+------------------------------------------------------------
+Channel: Al Quran
+Group: Infotainment
+URL: https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8
+------------------------------------------------------------
+Channel: Al Quran Radio
+Group: Religious
+URL: http://66.45.232.131:9994/;stream.mp3
+------------------------------------------------------------
+
+MOVIES:
+G-Serise
+Group: Bangla Movies
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8
+--------------------------------------------------------------------------------
+Amar Bangla
+Group: Bangla Movies
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://i.ibb.co/CPmLfGs/Amar-Bangla.png
+URL: https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/amarbanglatv.stream/playlist.m3u8
+--------------------------------------------------------------------------------
+ZB Cinema
+Group: Kolkata Bangla Movies
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: https://server.zillarbarta.com/ZBCINEMA/tracks-v1a1/mono.ts.m3u8
+--------------------------------------------------------------------------------
+Channel: Star Gold
+Group: Hindi Movies
+URL: http://103.99.249.139/stargold/tracks-v1a1/mono.m3u8
+------------------------------------------------------------
+Big Magic
+Group: Hindi
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: http://103.175.73.12:8080/live/13/13_0.m3u8
+--------------------------------------------------------------------------------
+Zee Anmol TV
+Group: Hindi Movies
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://upload.wikimedia.org/wikipedia/commons/b/b4/Zee_Anmol_Cinema_logo.png
+URL: http://103.175.73.12:8080/live/256/256_0.m3u8
+--------------------------------------------------------------------------------
+Zee Cinema HD
+Group: Hindi Movies
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Zee%20Cinema.png
+URL: http://103.99.249.139/zeecinema/index.m3u8
+Channel: B4U Kadak
+Group: Movies
+URL: https://cdn-2.pishow.tv/live/227/master.m3u8
+------------------------------------------------------------
+Zee Action
+Group: Hindi Movies
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Zee%20Action.png
+URL: http://103.175.73.12:8080/live/270/270_0.m3u8
+--------------------------------------------------------------------------------
+Channel: Goldmines Bollywood
+Group: Hindi Movies
+URL: http://103.175.73.12:8080/live/52/52_0.m3u8
+------------------------------------------------------------
+Channel: Goldmines
+Group: Movies
+URL: https://cdn-2.pishow.tv/live/1459/master.m3u8
+------------------------------------------------------------
+Channel: Goldmines Movies
+Group: Movies
+URL: https://cdn-2.pishow.tv/live/1461/master.m3u8
+------------------------------------------------------------
+Channel: Goldmines Movies 2
+Group: Movies
+URL: https://cdn-2.pishow.tv/live/1460/master.m3u8
+------------------------------------------------------------
+Channel: Zee Anmol TV
+Group: Hindi Movies
+URL: http://103.175.73.12:8080/live/256/256_0.m3u8
+------------------------------------------------------------
+Channel: Screem
+Group: Movies
+URL: https://nomawnoijl.gpcdn.net/akash/screem/playlist.m3u8
+------------------------------------------------------------
+Channel: Movie Sphere
+Group: Channels
+URL: https://moviesphereuk-samsunguk.amagi.tv/playlist.m3u8
+------------------------------------------------------------
+Channel: Action Hollywood Movies
+Group: Movies
+URL: https://amg01076-lightningintern-actionhollywood-samsungnz-82rry.amagi.tv/playlist/amg01076-lightningintern-actionhollywood-samsungnz/playlist.m3u8
+------------------------------------------------------------
+Channel: Crimes
+Group: Movies
+URL: https://nomawnoijl.gpcdn.net/akash/crimes/playlist.m3u8
+------------------------------------------------------------
+Channel: True Stories
+Group: Movies
+URL: https://nomawnoijl.gpcdn.net/akash/truestories/playlist.m3u8
+------------------------------------------------------------
+Channel: Intelligence
+Group: Movies
+URL: https://nomawnoijl.gpcdn.net/akash/intelligence/playlist.m3u8
+------------------------------------------------------------
+Channel: Cineedge HD
+Group: Movies
+URL: https://nomawnoijl.gpcdn.net/akash/cineedge/playlist.m3u8
+------------------------------------------------------------
+Channel: Uniques HD
+Group: Movies
+URL: https://nomawnoijl.gpcdn.net/akash/uniques/playlist.m3u8
+------------------------------------------------------------
+Channel: Superrix HD
+Group: Movies
+URL: https://nomawnoijl.gpcdn.net/akash/superrix/playlist.m3u8
+------------------------------------------------------------
+Channel: Originals
+Group: Movies
+URL: https://nomawnoijl.gpcdn.net/akash/originals/playlist.m3u8
+------------------------------------------------------------
+
+MUSIC:
+Channel: MUSIC BANGLA
+Group: Bangla
+URL: http://live.matribhumitv.com/music-bangla/index.m3u8
+------------------------------------------------------------
+Channel: Music Mastii
+Group: Music
+URL: https://live20.bozztv.com/giatvplayout7/giatv-209592/tracks-v1a1/mono.ts.m3u8
+------------------------------------------------------------
+Channel: Sangeet Bangla
+Group: Channels
+URL: https://cdn-4.pishow.tv/live/1143/master.m3u8
+------------------------------------------------------------
+Channel: 9XM
+Group: Hindi Music
+URL: http://103.175.73.12:8080/live/155/155_0.m3u8
+------------------------------------------------------------
+Channel: Music India
+Group: Hindi
+URL: https://cdn-2.pishow.tv/live/226/master.m3u8
+------------------------------------------------------------
+Channel: Dhoom Music
+Group: Kolkata Bangla Music
+URL: http://103.175.73.12:8080/live/378/378_0.m3u8
+------------------------------------------------------------
+Channel: Big Magic
+Group: Hindi
+URL: http://103.175.73.12:8080/live/13/13_0.m3u8
+------------------------------------------------------------
+Channel: YRF Music HD
+Group: Music
+URL: https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01412-xiaomiasia-yrfmusic-xiaomi/playlist.m3u8
+------------------------------------------------------------
+E24
+Group: Hindi Music
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: https://i.ibb.co/dbjnG3X/20240803-105403.png
+URL: http://103.175.73.12:8080/live/159/159_0.m3u8
+--------------------------------------------------------------------------------
+Hindi Hits HD
+Group: Hindi Music
+Country: 
+Language: 
+TVG ID: 
+TVG Name: 
+Logo: 
+URL: http://146.59.253.52:8080/hindihitshd/index.m3u8
+--------------------------------------------------------------------------------
+Channel: Party Universe
+Group: Music
+URL: https://nomawnoijl.gpcdn.net/akash/partyuniverse/playlist.m3u8
+------------------------------------------------------------
