@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import CategoryRow from "@/components/CategoryRow";
+import MatchScheduleBanner from "@/components/MatchScheduleBanner";
 import { channels } from "@/data/channels";
 import { Link } from "wouter";
 import { Play } from "lucide-react";
@@ -79,8 +80,11 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Match Schedule Banner */}
+      <MatchScheduleBanner />
+
       {/* Category Rows */}
-      <div className="-mt-16 relative z-20 flex flex-col gap-4">
+      <div className="relative z-20 flex flex-col gap-4 mt-4">
         {categories.map(category => {
           const categoryChannels = channels.filter(c => c.category === category);
           if (categoryChannels.length === 0) return null;
