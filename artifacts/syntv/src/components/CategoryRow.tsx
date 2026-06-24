@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { Channel } from "@/data/channels";
 import ChannelLogo from "./ChannelLogo";
+import { checkChannelHealth, type ChannelHealth } from "@/lib/channelHealth";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -9,6 +10,32 @@ interface CategoryRowProps {
   title: string;
   channels: Channel[];
   showAll?: boolean;
+}
+
+function HealthBadge({ channel }: { channel: Channel }) {
+  const [status, setStatus] = useState<ChannelHealth | "checking">("checking");
+
+  useEffect(() => {
+    let mounted = true;
+    setStatus("checking");
+    checkChannelHealth(channel).then((nextStatus) => {
+      if (mounted) setStatus(nextStatus);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [channel]);
+
+  const badge = {
+    checking: "bg-zinc-700 text-zinc-200",
+    online: "bg-emerald-600 text-white",
+    offline: "bg-red-700 text-white",
+    unknown: "bg-amber-500 text-black",
+  }[status];
+
+  const label = status === "checking" ? "CHECK" : status.toUpperCase();
+
+  return <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-black ${badge}`}>{label}</span>;
 }
 
 export default function CategoryRow({ title, channels, showAll = true }: CategoryRowProps) {
@@ -35,7 +62,10 @@ export default function CategoryRow({ title, channels, showAll = true }: Categor
   return (
     <div className="py-4 md:py-6 group/row" data-testid={`category-row-${title}`}>
       <div className="flex items-end justify-between mb-3 md:mb-4 px-4 md:px-8">
-        <h2 className="text-lg md:text-2xl font-bold text-white tracking-wide">{title}</h2>
+        <div>
+          <h2 className="text-lg md:text-2xl font-bold text-white tracking-wide">{title}</h2>
+          <p className="mt-1 text-[10px] uppercase tracking-wider text-zinc-500">{channels.length} channels</p>
+        </div>
         {showAll && (
           <Link href={`/category/${title.toLowerCase()}`} className="text-xs md:text-sm font-semibold text-zinc-400 hover:text-red-500 transition">
             See All
@@ -69,8 +99,12 @@ export default function CategoryRow({ title, channels, showAll = true }: Categor
             >
               <Link href={`/watch/${channel.id}`}>
                 <div className="channel-card flex-none w-[130px] h-[180px] md:w-[160px] md:h-[220px] bg-card rounded-xl border border-card-border overflow-hidden relative flex flex-col items-center justify-center p-3 md:p-4">
-                  <div className="absolute top-2 right-2 z-10">
+                  <div className="absolute top-2 right-2 z-10 flex items-center gap-1">
+                    {channel.quality && <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[9px] font-black text-white">{channel.quality}</span>}
                     <span className="live-badge">LIVE</span>
+                  </div>
+                  <div className="absolute left-2 top-2 z-10">
+                    <HealthBadge channel={channel} />
                   </div>
                   <ChannelLogo channel={channel} size="lg" className="mb-3 md:mb-4 shadow-xl" />
                   <h3 className="text-center font-bold text-white text-xs md:text-sm line-clamp-2 w-full mt-1 md:mt-2">{channel.name}</h3>
