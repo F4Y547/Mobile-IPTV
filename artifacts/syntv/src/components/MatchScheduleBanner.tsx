@@ -19,12 +19,19 @@ type Match = {
 };
 
 type Countdown = { days: number; hours: number; minutes: number; seconds: number };
+type ApiObject = Record<string, unknown>;
 
-type WorldCupApiMatch = Record<string, unknown>;
+type WorldCupProxyPayload = {
+  games?: unknown;
+  teams?: unknown;
+  stadiums?: unknown;
+  groups?: unknown;
+  updatedAt?: string;
+  errors?: string[];
+};
 
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env ?? {};
-const WORLD_CUP_API_URL = env.VITE_WORLDCUP_API_URL || "https://worldcup26.ir/get/games";
-const WORLD_CUP_API_KEY = env.VITE_WORLDCUP_API_KEY || "";
+const WORLD_CUP_API_URL = env.VITE_WORLDCUP_PROXY_URL || "/api/worldcup";
 const MATCH_REFRESH_INTERVAL = 60_000;
 
 const FLAG_BY_TEAM: Record<string, string> = {
@@ -66,8 +73,8 @@ const FLAG_BY_TEAM: Record<string, string> = {
   switzerland: "🇨🇭",
   tunisia: "🇹🇳",
   turkey: "🇹🇷",
-  "united states": "🇺🇸",
   usa: "🇺🇸",
+  "united states": "🇺🇸",
   uruguay: "🇺🇾",
   uzbekistan: "🇺🇿",
 };
@@ -84,7 +91,9 @@ const FALLBACK_MATCHES: Match[] = [
 ];
 
 function getString(value: unknown): string | undefined {
-  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+  if (typeof value === "string" && value.trim()) return value.trim();
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  return undefined;
 }
 
 function getNumber(value: unknown): number | null {
@@ -93,28 +102,78 @@ function getNumber(value: unknown): number | null {
   return null;
 }
 
-function getNestedString(item: WorldCupApiMatch, paths: string[][]): string | undefined {
+function asArray(value: unknown): ApiObject[] {
+  if (Array.isArray(value)) return value.filter((item): item is ApiObject => item !== null && typeof item === "object") as ApiObject[];
+  if (!value || typeof value !== "object") return [];
+
+  const objectValue = value as ApiObject;
+  for (const key of ["data", "results", "items", "games", "matches", "teams", "stadiums", "groups"]) {
+    const nested = objectValue[key];
+    if (Array.isArray(nested)) return asArray(nested);
+  }
+
+  return [];
+}
+
+function getNestedValue(item: ApiObject, paths: string[][]): unknown {
   for (const path of paths) {
     let value: unknown = item;
     for (const key of path) {
-      value = value && typeof value === "object" ? (value as Record<string, unknown>)[key] : undefined;
+      value = value && typeof value === "object" ? (value as ApiObject)[key] : undefined;
     }
-    const text = getString(value);
-    if (text) return text;
+    if (value !== undefined && value !== null && value !== "") return value;
   }
   return undefined;
 }
 
-function getNestedNumber(item: WorldCupApiMatch, paths: string[][]): number | null {
-  for (const path of paths) {
-    let value: unknown = item;
-    for (const key of path) {
-      value = value && typeof value === "object" ? (value as Record<string, unknown>)[key] : undefined;
-    }
-    const number = getNumber(value);
-    if (number !== null) return number;
+function getNestedString(item: ApiObject, paths: string[][]): string | undefined {
+  return getString(getNestedValue(item, paths));
+}
+
+function getNestedNumber(item: ApiObject, paths: string[][]): number | null {
+  return getNumber(getNestedValue(item, paths));
+}
+
+function getEntityId(item: ApiObject): string | undefined {
+  return getNestedString(item, [["id"], ["team_id"], ["stadium_id"], ["group_id"], ["code"], ["slug"]]);
+}
+
+function getEntityName(item: ApiObject): string | undefined {
+  return getNestedString(item, [
+    ["name"],
+    ["team_name"],
+    ["country"],
+    ["country_name"],
+    ["title"],
+    ["stadium_name"],
+    ["group_name"],
+    ["name_en"],
+  ]);
+}
+
+function buildLookup(collection: unknown): Record<string, ApiObject> {
+  const lookup: Record<string, ApiObject> = {};
+  for (const item of asArray(collection)) {
+    const id = getEntityId(item);
+    const name = getEntityName(item);
+    if (id) lookup[id] = item;
+    if (name) lookup[name.toLowerCase()] = item;
   }
-  return null;
+  return lookup;
+}
+
+function resolveEntityName(idOrName: unknown, lookup: Record<string, ApiObject>, fallback = "TBD"): string {
+  const raw = getString(idOrName);
+  if (!raw) return fallback;
+  const item = lookup[raw] || lookup[raw.toLowerCase()];
+  return item ? getEntityName(item) || raw : raw;
+}
+
+function resolveEntityField(idOrName: unknown, lookup: Record<string, ApiObject>, paths: string[][]): string | undefined {
+  const raw = getString(idOrName);
+  if (!raw) return undefined;
+  const item = lookup[raw] || lookup[raw.toLowerCase()];
+  return item ? getNestedString(item, paths) : undefined;
 }
 
 function getTeamFlag(teamName: string, fallback?: string): string {
@@ -122,27 +181,37 @@ function getTeamFlag(teamName: string, fallback?: string): string {
   return fallback || FLAG_BY_TEAM[normalized] || "🏳️";
 }
 
-function getMatchDate(item: WorldCupApiMatch): Date {
+function getMatchDate(item: ApiObject): Date {
   const dateText = getNestedString(item, [
     ["kickoff"],
     ["kickoff_time"],
+    ["kickoffTime"],
     ["date"],
     ["datetime"],
     ["time"],
     ["start_time"],
+    ["startTime"],
     ["scheduled_at"],
+    ["local_date"],
   ]);
-
-  const parsed = dateText ? new Date(dateText) : null;
+  const timeText = getNestedString(item, [["local_time"], ["hour"]]);
+  const combined = dateText && timeText && !dateText.includes("T") ? `${dateText}T${timeText}` : dateText;
+  const parsed = combined ? new Date(combined) : null;
   return parsed && !Number.isNaN(parsed.getTime()) ? parsed : new Date();
 }
 
 function isMatchLive(status?: string): boolean {
-  return /live|in.?progress|playing|1st|2nd|halftime/i.test(status || "");
+  return /live|in.?progress|playing|1st|2nd|halftime|first half|second half/i.test(status || "");
 }
 
-function normalizeMatch(item: WorldCupApiMatch, index: number): Match | null {
-  const homeTeam = getNestedString(item, [
+function normalizeMatch(
+  item: ApiObject,
+  index: number,
+  teamsById: Record<string, ApiObject>,
+  stadiumsById: Record<string, ApiObject>,
+  groupsById: Record<string, ApiObject>
+): Match | null {
+  const homeRaw = getNestedValue(item, [
     ["homeTeam"],
     ["home_team"],
     ["home", "name"],
@@ -150,8 +219,12 @@ function normalizeMatch(item: WorldCupApiMatch, index: number): Match | null {
     ["team1"],
     ["team_1", "name"],
     ["team_1"],
+    ["home_team_id"],
+    ["homeTeamId"],
+    ["team1_id"],
+    ["team_1_id"],
   ]);
-  const awayTeam = getNestedString(item, [
+  const awayRaw = getNestedValue(item, [
     ["awayTeam"],
     ["away_team"],
     ["away", "name"],
@@ -159,14 +232,23 @@ function normalizeMatch(item: WorldCupApiMatch, index: number): Match | null {
     ["team2"],
     ["team_2", "name"],
     ["team_2"],
+    ["away_team_id"],
+    ["awayTeamId"],
+    ["team2_id"],
+    ["team_2_id"],
   ]);
 
-  if (!homeTeam || !awayTeam) return null;
+  const homeTeam = resolveEntityName(homeRaw, teamsById);
+  const awayTeam = resolveEntityName(awayRaw, teamsById);
+  if (!homeTeam || !awayTeam || homeTeam === "TBD" || awayTeam === "TBD") return null;
 
-  const status = getNestedString(item, [["status"], ["match_status"], ["state"]]) || "Scheduled";
-  const venue = getNestedString(item, [["venue"], ["stadium"], ["stadium", "name"]]) || "FIFA World Cup Stadium";
-  const city = getNestedString(item, [["city"], ["location"], ["stadium", "city"]]) || "2026 Host City";
-  const stage = getNestedString(item, [["stage"], ["round"], ["group"], ["group_name"]]) || "FIFA World Cup 2026";
+  const stadiumRaw = getNestedValue(item, [["stadium_id"], ["stadiumId"], ["stadium"], ["venue"]]);
+  const groupRaw = getNestedValue(item, [["group_id"], ["groupId"], ["group"], ["group_name"]]);
+  const status = getNestedString(item, [["status"], ["match_status"], ["state"], ["status_name"]]) || "Scheduled";
+  const venue = resolveEntityName(stadiumRaw, stadiumsById, "FIFA World Cup Stadium");
+  const city = resolveEntityField(stadiumRaw, stadiumsById, [["city"], ["location"], ["host_city"]]) || getNestedString(item, [["city"], ["location"]]) || "2026 Host City";
+  const groupName = resolveEntityName(groupRaw, groupsById, "");
+  const stage = getNestedString(item, [["stage"], ["round"], ["round_name"], ["phase"]]) || groupName || "FIFA World Cup 2026";
   const homeFlag = getTeamFlag(homeTeam, getNestedString(item, [["homeFlag"], ["home_flag"], ["home", "flag"]]));
   const awayFlag = getTeamFlag(awayTeam, getNestedString(item, [["awayFlag"], ["away_flag"], ["away", "flag"]]));
 
@@ -181,49 +263,40 @@ function normalizeMatch(item: WorldCupApiMatch, index: number): Match | null {
     city,
     stage,
     status,
-    homeScore: getNestedNumber(item, [["homeScore"], ["home_score"], ["score", "home"], ["home", "score"]]),
-    awayScore: getNestedNumber(item, [["awayScore"], ["away_score"], ["score", "away"], ["away", "score"]]),
+    homeScore: getNestedNumber(item, [["homeScore"], ["home_score"], ["score", "home"], ["home", "score"], ["home_goals"], ["team1_score"], ["team_1_score"]]),
+    awayScore: getNestedNumber(item, [["awayScore"], ["away_score"], ["score", "away"], ["away", "score"], ["away_goals"], ["team2_score"], ["team_2_score"]]),
     isLive: isMatchLive(status),
   };
 }
 
-function normalizeApiResponse(payload: unknown): Match[] {
-  const possibleMatches = Array.isArray(payload)
-    ? payload
-    : payload && typeof payload === "object"
-      ? (payload as Record<string, unknown>).games ||
-        (payload as Record<string, unknown>).matches ||
-        (payload as Record<string, unknown>).data ||
-        (payload as Record<string, unknown>).results
-      : [];
+function normalizeApiResponse(payload: unknown): { matches: Match[]; updatedAt?: Date; errors: string[] } {
+  const proxyPayload = payload && typeof payload === "object" ? (payload as WorldCupProxyPayload) : {};
+  const games = asArray(Array.isArray(payload) ? payload : proxyPayload.games || (payload as ApiObject)?.matches || (payload as ApiObject)?.data || (payload as ApiObject)?.results);
+  const teamsById = buildLookup(proxyPayload.teams);
+  const stadiumsById = buildLookup(proxyPayload.stadiums);
+  const groupsById = buildLookup(proxyPayload.groups);
 
-  if (!Array.isArray(possibleMatches)) return [];
-
-  return possibleMatches
-    .map((item, index) => normalizeMatch(item as WorldCupApiMatch, index))
+  const matches = games
+    .map((item, index) => normalizeMatch(item, index, teamsById, stadiumsById, groupsById))
     .filter((match): match is Match => Boolean(match))
     .sort((a, b) => {
       if (a.isLive && !b.isLive) return -1;
       if (!a.isLive && b.isLive) return 1;
       return a.kickoff.getTime() - b.kickoff.getTime();
     });
+
+  const parsedUpdatedAt = proxyPayload.updatedAt ? new Date(proxyPayload.updatedAt) : undefined;
+  return {
+    matches,
+    updatedAt: parsedUpdatedAt && !Number.isNaN(parsedUpdatedAt.getTime()) ? parsedUpdatedAt : undefined,
+    errors: Array.isArray(proxyPayload.errors) ? proxyPayload.errors : [],
+  };
 }
 
-async function fetchWorldCupMatches(): Promise<Match[]> {
-  const headers: HeadersInit = { Accept: "application/json" };
-
-  if (WORLD_CUP_API_KEY) {
-    headers.Authorization = `Bearer ${WORLD_CUP_API_KEY}`;
-    headers["x-api-key"] = WORLD_CUP_API_KEY;
-  }
-
-  const response = await fetch(WORLD_CUP_API_URL, { headers });
-  if (!response.ok) {
-    throw new Error(`World Cup API failed with ${response.status}`);
-  }
-
-  const payload = await response.json();
-  return normalizeApiResponse(payload);
+async function fetchWorldCupMatches(): Promise<{ matches: Match[]; updatedAt?: Date; errors: string[] }> {
+  const response = await fetch(WORLD_CUP_API_URL, { headers: { Accept: "application/json" } });
+  if (!response.ok) throw new Error(`World Cup API failed with ${response.status}`);
+  return normalizeApiResponse(await response.json());
 }
 
 function getCountdown(kickoff: Date): Countdown | null {
@@ -257,7 +330,6 @@ function MatchCard({ match }: { match: Match }) {
       className="flex-shrink-0 w-[240px] sm:w-72 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-3 sm:p-4 hover:border-red-600/50 hover:bg-white/8 transition-all duration-200 group"
       data-testid={`match-card-${match.id}`}
     >
-      {/* Stage + Live badge */}
       <div className="flex items-center justify-between mb-2 sm:mb-3">
         <span className="text-[10px] sm:text-xs text-zinc-500 uppercase tracking-wider font-semibold truncate max-w-[130px]">{match.stage}</span>
         {match.isLive ? (
@@ -270,7 +342,6 @@ function MatchCard({ match }: { match: Match }) {
         )}
       </div>
 
-      {/* Teams */}
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className="flex flex-col items-center gap-1 flex-1">
           <span className="text-2xl sm:text-3xl">{match.homeFlag}</span>
@@ -279,9 +350,7 @@ function MatchCard({ match }: { match: Match }) {
 
         <div className="flex flex-col items-center px-2 sm:px-3">
           {hasScore ? (
-            <span className="text-white font-black text-lg sm:text-xl tabular-nums">
-              {match.homeScore} - {match.awayScore}
-            </span>
+            <span className="text-white font-black text-lg sm:text-xl tabular-nums">{match.homeScore} - {match.awayScore}</span>
           ) : match.isLive ? (
             <span className="text-red-400 font-black text-base sm:text-lg">LIVE</span>
           ) : (
@@ -296,13 +365,9 @@ function MatchCard({ match }: { match: Match }) {
         </div>
       </div>
 
-      {/* Countdown or venue */}
       {match.isLive ? (
         <Link href="/watch/fifa-wc-2026">
-          <button
-            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider transition-all"
-            data-testid={`watch-match-${match.id}`}
-          >
+          <button className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider transition-all" data-testid={`watch-match-${match.id}`}>
             <Play className="w-3 h-3 fill-current" />
             Watch Live
           </button>
@@ -310,12 +375,7 @@ function MatchCard({ match }: { match: Match }) {
       ) : countdown ? (
         <div className="space-y-2">
           <div className="grid grid-cols-4 gap-1 text-center">
-            {[
-              { val: countdown.days, label: "D" },
-              { val: countdown.hours, label: "H" },
-              { val: countdown.minutes, label: "M" },
-              { val: countdown.seconds, label: "S" },
-            ].map(({ val, label }) => (
+            {[{ val: countdown.days, label: "D" }, { val: countdown.hours, label: "H" }, { val: countdown.minutes, label: "M" }, { val: countdown.seconds, label: "S" }].map(({ val, label }) => (
               <div key={label} className="bg-black/40 rounded-md py-1">
                 <p className="text-white font-black text-xs sm:text-sm tabular-nums">{String(val).padStart(2, "0")}</p>
                 <p className="text-zinc-600 text-[9px] uppercase">{label}</p>
@@ -348,15 +408,15 @@ export default function MatchScheduleBanner() {
 
     async function loadMatches() {
       try {
-        const liveMatches = await fetchWorldCupMatches();
+        const result = await fetchWorldCupMatches();
         if (!isMounted) return;
 
-        if (liveMatches.length > 0) {
-          setMatches(liveMatches);
-          setApiError(null);
-          setLastUpdated(new Date());
+        if (result.matches.length > 0) {
+          setMatches(result.matches);
+          setApiError(result.errors.length ? result.errors.join(" · ") : null);
+          setLastUpdated(result.updatedAt || new Date());
         } else {
-          setApiError("API returned no matches. Showing fallback schedule.");
+          setApiError("API returned no readable matches. Showing fallback schedule.");
         }
       } catch (error) {
         if (!isMounted) return;
@@ -382,7 +442,6 @@ export default function MatchScheduleBanner() {
 
   return (
     <div className="relative z-20 bg-gradient-to-r from-black via-zinc-950 to-black border-y border-white/5 py-4 sm:py-5" data-testid="match-schedule-banner">
-      {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-16 mb-3 sm:mb-4">
         <div className="flex items-center gap-2 sm:gap-3">
           <span className="text-base sm:text-lg">🏆</span>
@@ -403,33 +462,17 @@ export default function MatchScheduleBanner() {
         </div>
         <div className="flex items-center gap-2">
           {isLoading && <RefreshCw className="h-4 w-4 animate-spin text-zinc-500" />}
-          <button
-            onClick={() => scroll("left")}
-            className="p-1.5 rounded-full border border-white/10 text-zinc-400 hover:text-white hover:border-white/30 transition-all"
-            data-testid="schedule-scroll-left"
-            aria-label="Scroll left"
-          >
+          <button onClick={() => scroll("left")} className="p-1.5 rounded-full border border-white/10 text-zinc-400 hover:text-white hover:border-white/30 transition-all" data-testid="schedule-scroll-left" aria-label="Scroll left">
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <button
-            onClick={() => scroll("right")}
-            className="p-1.5 rounded-full border border-white/10 text-zinc-400 hover:text-white hover:border-white/30 transition-all"
-            data-testid="schedule-scroll-right"
-            aria-label="Scroll right"
-          >
+          <button onClick={() => scroll("right")} className="p-1.5 rounded-full border border-white/10 text-zinc-400 hover:text-white hover:border-white/30 transition-all" data-testid="schedule-scroll-right" aria-label="Scroll right">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Scrollable match cards */}
-      <div
-        id="match-scroll"
-        className="flex gap-3 px-4 md:px-16 overflow-x-auto scrollbar-hide pb-1"
-      >
-        {matches.map(match => (
-          <MatchCard key={match.id} match={match} />
-        ))}
+      <div id="match-scroll" className="flex gap-3 px-4 md:px-16 overflow-x-auto scrollbar-hide pb-1">
+        {matches.map(match => <MatchCard key={match.id} match={match} />)}
       </div>
     </div>
   );
