@@ -100,7 +100,6 @@ export default function CategoryRow({ title, channels, showAll = true }: Categor
               <Link href={`/watch/${channel.id}`}>
                 <div className="channel-card flex-none w-[130px] h-[180px] md:w-[160px] md:h-[220px] bg-card rounded-xl border border-card-border overflow-hidden relative flex flex-col items-center justify-center p-3 md:p-4">
                   <div className="absolute top-2 right-2 z-10 flex items-center gap-1">
-                    {channel.quality && <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[9px] font-black text-white">{channel.quality}</span>}
                     <span className="live-badge">LIVE</span>
                   </div>
                   <div className="absolute left-2 top-2 z-10">
