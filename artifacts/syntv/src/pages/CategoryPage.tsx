@@ -1,6 +1,6 @@
 import { useParams, Link } from "wouter";
 import Navbar from "@/components/Navbar";
-import { channels } from "@/data/channels";
+import { allChannels as channels } from "@/data/allChannels";
 import ChannelLogo from "@/components/ChannelLogo";
 import NotFound from "./not-found";
 
