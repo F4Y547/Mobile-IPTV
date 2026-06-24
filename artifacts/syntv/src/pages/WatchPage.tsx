@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
 import Navbar from "@/components/Navbar";
-import { channels, type Channel } from "@/data/channels";
+import { type Channel } from "@/data/channels";
+import { allChannels as channels } from "@/data/allChannels";
 import { getChannelMeta } from "@/data/channelMeta";
 import HlsPlayer from "@/components/HlsPlayer";
 import ChannelLogo from "@/components/ChannelLogo";
