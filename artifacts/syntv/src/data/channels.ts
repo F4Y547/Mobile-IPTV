@@ -63,7 +63,8 @@ export const channels: Channel[] = [
   { id: "channel-i-hd", name: "Channel I HD", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8" },
   // NEWS
   { id: "jamuna-tv", name: "Jamuna TV", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8" },
-  { id: "somoy-tv", name: "Somoy TV", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
+  { id: "somoy-tv", name: "Somoy TV", category: "News", url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8" },
+  { id: "channel-1-news", name: "Channel 1", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
   { id: "ekattor-hd", name: "Ekattor HD", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8" },
   { id: "channel-24", name: "Channel 24 HD", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8" },
   { id: "atn-news", name: "ATN News", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8" },
