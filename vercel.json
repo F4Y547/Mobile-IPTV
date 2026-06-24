@@ -3,14 +3,13 @@
   "installCommand": "pnpm install",
   "buildCommand": "PORT=5000 BASE_PATH='/' pnpm --filter @workspace/syntv build && rm -rf public && BUILD_OUTPUT=$(find . .. -path '*/dist/public/index.html' -print -quit | xargs dirname) && mkdir -p public && cp -R \"$BUILD_OUTPUT\"/. public/",
   "outputDirectory": "public",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "handle": "filesystem"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ],
   "github": {
