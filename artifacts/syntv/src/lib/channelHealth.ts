@@ -1,4 +1,5 @@
 import type { Channel } from "@/data/channels";
+import { detectStreamFormat, type StreamFormat } from "@/lib/streamFormat";
 
 export type ChannelHealth = "online" | "offline" | "unknown";
 
@@ -7,11 +8,21 @@ type CacheEntry = {
   checkedAt: number;
 };
 
-type ChannelWithBackups = Channel & { backupUrls?: string[] };
+type ChannelWithPlayback = Channel & {
+  format?: StreamFormat;
+  sourceType?: "hls" | "ts" | "dash" | "iframe";
+  backupUrls?: string[];
+};
 
 const HEALTH_CACHE_TTL_MS = 3 * 60 * 1000;
 const REQUEST_TIMEOUT_MS = 4500;
 const cache = new Map<string, CacheEntry>();
+
+function sourceTypeToFormat(sourceType?: ChannelWithPlayback["sourceType"]): StreamFormat | undefined {
+  if (!sourceType) return undefined;
+  if (sourceType === "ts") return "mpegts";
+  return sourceType;
+}
 
 function isLikelyCorsOrOpaqueError(error: unknown) {
   const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
@@ -48,11 +59,18 @@ export async function checkChannelHealth(channel: Channel): Promise<ChannelHealt
   const cached = cache.get(channel.id);
   if (cached && Date.now() - cached.checkedAt < HEALTH_CACHE_TTL_MS) return cached.status;
 
-  const channelWithBackups = channel as ChannelWithBackups;
-  const urls = [channel.url, ...(channelWithBackups.backupUrls || [])].filter(Boolean);
+  const playbackChannel = channel as ChannelWithPlayback;
+  const urls = [channel.url, ...(playbackChannel.backupUrls || [])].filter(Boolean);
   let finalStatus: ChannelHealth = "unknown";
 
   for (const url of urls) {
+    const format = detectStreamFormat(url, playbackChannel.format || sourceTypeToFormat(playbackChannel.sourceType));
+
+    if (format === "iframe" || format === "unknown") {
+      finalStatus = "unknown";
+      continue;
+    }
+
     const headStatus = await probe(url, "HEAD");
     if (headStatus === "online") {
       finalStatus = "online";
