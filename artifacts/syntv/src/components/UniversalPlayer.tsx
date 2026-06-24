@@ -16,10 +16,7 @@ type ChannelWithPlayback = Channel & {
   backupUrls?: string[];
 };
 
-type QualityLevel = {
-  index: number;
-  label: string;
-};
+type QualityLevel = { index: number; label: string };
 
 type DashPlayer = {
   initialize: (video: HTMLVideoElement, url: string, autoplay: boolean) => void;
@@ -27,14 +24,10 @@ type DashPlayer = {
   on?: (event: string, callback: (event?: unknown) => void) => void;
 };
 
-type DashJsGlobal = {
-  MediaPlayer: () => { create: () => DashPlayer };
-};
+type DashJsGlobal = { MediaPlayer: () => { create: () => DashPlayer } };
 
 declare global {
-  interface Window {
-    dashjs?: DashJsGlobal;
-  }
+  interface Window { dashjs?: DashJsGlobal }
 }
 
 const DASH_JS_URL = "https://cdn.dashjs.org/latest/dash.all.min.js";
@@ -69,6 +62,12 @@ function directUnsupportedMessage(format: StreamFormat) {
   return "This stream format may not be supported by your browser. Try a backup source.";
 }
 
+function isTypingTarget(target: EventTarget | null) {
+  const element = target as HTMLElement | null;
+  if (!element) return false;
+  return ["INPUT", "TEXTAREA", "SELECT"].includes(element.tagName) || element.isContentEditable;
+}
+
 function loadDashJs() {
   if (window.dashjs) return Promise.resolve(window.dashjs);
 
@@ -89,12 +88,6 @@ function loadDashJs() {
   });
 }
 
-function isTypingTarget(target: EventTarget | null) {
-  const element = target as HTMLElement | null;
-  if (!element) return false;
-  return ["INPUT", "TEXTAREA", "SELECT"].includes(element.tagName) || element.isContentEditable;
-}
-
 export default function UniversalPlayer({ url, channel, isMini = false }: UniversalPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -107,10 +100,14 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
   const playbackChannel = getPlaybackChannel(channel);
   const sources = useMemo(() => uniqueSources(url, playbackChannel.backupUrls), [url, playbackChannel.backupUrls]);
   const [sourceIndex, setSourceIndex] = useState(0);
+  const [reloadNonce, setReloadNonce] = useState(0);
+
   const activeUrl = sources[sourceIndex] || url;
   const format = detectStreamFormat(activeUrl, playbackChannel.format || sourceTypeToFormat(playbackChannel.sourceType));
+  const isIframe = format === "iframe";
+  const canTryBackup = sourceIndex < sources.length - 1;
 
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -126,17 +123,12 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isControlsVisible, setIsControlsVisible] = useState(true);
   const [isPictureInPicture, setIsPictureInPicture] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
-  const canTryBackup = sourceIndex < sources.length - 1;
   const canSeek = Number.isFinite(duration) && duration > 0 && !isLiveStream;
-  const isIframe = format === "iframe";
   const progress = canSeek ? Math.min(100, Math.max(0, (currentTime / duration) * 100)) : 100;
-  const controlsShouldShow = isControlsVisible || isLoading || isBuffering || Boolean(errorMessage) || isMini;
+  const controlsShouldShow = isControlsVisible || isLoading || isBuffering || Boolean(errorMessage) || isMini || autoplayBlocked;
   const supportsPiP = !isIframe && typeof document !== "undefined" && Boolean(document.pictureInPictureEnabled);
-
-  const safeSetStatus = useCallback((message: string) => {
-    if (mountedRef.current) setStatusMessage(message);
-  }, []);
 
   const destroyPlayers = useCallback(() => {
     if (hlsRef.current) {
@@ -149,9 +141,10 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
     }
   }, []);
 
-  const resetPlaybackState = useCallback(() => {
+  const resetPlaybackState = useCallback((nextFormat: StreamFormat) => {
     retryCountRef.current = 0;
     setErrorMessage(null);
+    setAutoplayBlocked(false);
     setIsLoading(true);
     setIsBuffering(false);
     setStatusMessage("Loading stream…");
@@ -159,24 +152,41 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
     setSelectedQuality(-1);
     setCurrentTime(0);
     setDuration(0);
-    setIsLiveStream(format === "hls" || format === "dash");
-  }, [format]);
+    setIsLiveStream(nextFormat === "hls" || nextFormat === "dash");
+  }, []);
 
   const showControls = useCallback((persist = false) => {
     setIsControlsVisible(true);
     if (controlsTimerRef.current) window.clearTimeout(controlsTimerRef.current);
-    if (!persist && !isMini && !errorMessage && !isLoading) {
+    if (!persist && !isMini && !errorMessage && !isLoading && !autoplayBlocked) {
       controlsTimerRef.current = window.setTimeout(() => setIsControlsVisible(false), CONTROLS_HIDE_DELAY_MS);
     }
-  }, [errorMessage, isLoading, isMini]);
+  }, [autoplayBlocked, errorMessage, isLoading, isMini]);
+
+  const tryPlay = useCallback(async (video: HTMLVideoElement) => {
+    try {
+      await video.play();
+      setIsPlaying(true);
+      setAutoplayBlocked(false);
+      setErrorMessage(null);
+    } catch {
+      setIsPlaying(false);
+      setAutoplayBlocked(true);
+      setStatusMessage("Tap play to start the stream.");
+      showControls(true);
+    }
+  }, [showControls]);
 
   const switchSource = useCallback((index: number) => {
+    const nextIndex = Math.min(Math.max(index, 0), sources.length - 1);
     retryCountRef.current = 0;
     setErrorMessage(null);
+    setAutoplayBlocked(false);
     setIsLoading(true);
     setIsBuffering(false);
-    setStatusMessage(index === 0 ? "Loading primary source…" : `Trying backup source ${index}…`);
-    setSourceIndex(Math.min(Math.max(index, 0), sources.length - 1));
+    setStatusMessage(nextIndex === 0 ? "Loading primary source…" : `Trying backup source ${nextIndex}…`);
+    setSourceIndex(nextIndex);
+    setReloadNonce((value) => value + 1);
     showControls(true);
   }, [showControls, sources.length]);
 
@@ -194,25 +204,21 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
   const retryCurrentSource = useCallback(() => {
     retryCountRef.current = 0;
     setErrorMessage(null);
+    setAutoplayBlocked(false);
     setIsLoading(true);
     setIsBuffering(false);
     setStatusMessage("Retrying stream…");
+    setReloadNonce((value) => value + 1);
     showControls(true);
-
-    const video = videoRef.current;
-    if (video) {
-      video.load();
-      video.play().catch(() => setIsPlaying(false));
-    }
   }, [showControls]);
 
   const togglePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video || errorMessage || isIframe) return;
-    if (video.paused) video.play().catch(() => setIsPlaying(false));
+    if (video.paused) tryPlay(video);
     else video.pause();
     showControls();
-  }, [errorMessage, isIframe, showControls]);
+  }, [errorMessage, isIframe, showControls, tryPlay]);
 
   const toggleMute = useCallback(() => {
     const video = videoRef.current;
@@ -231,10 +237,11 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
   }, [showControls]);
 
   const togglePictureInPicture = useCallback(async () => {
-    const video = videoRef.current as (HTMLVideoElement & { requestPictureInPicture?: () => Promise<PictureInPictureWindow> }) | null;
+    const video = videoRef.current as (HTMLVideoElement & { requestPictureInPicture?: () => Promise<unknown> }) | null;
+    const exitPiP = document.exitPictureInPicture as (() => Promise<unknown>) | undefined;
     if (!video || !supportsPiP) return;
     try {
-      if (document.pictureInPictureElement) await document.exitPictureInPicture();
+      if (document.pictureInPictureElement && exitPiP) await exitPiP.call(document);
       else if (video.requestPictureInPicture) await video.requestPictureInPicture();
     } catch (error) {
       console.warn("Picture-in-picture failed", error);
@@ -252,8 +259,8 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
 
   useEffect(() => {
     setSourceIndex(0);
-    resetPlaybackState();
-  }, [resetPlaybackState, url]);
+    setReloadNonce((value) => value + 1);
+  }, [url]);
 
   useEffect(() => {
     if (isIframe) {
@@ -270,7 +277,7 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
     if (!video) return;
 
     destroyPlayers();
-    resetPlaybackState();
+    resetPlaybackState(format);
     setStatusMessage(sourceIndex === 0 ? "Loading stream…" : `Trying backup source ${sourceIndex}…`);
 
     video.controls = false;
@@ -285,7 +292,6 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
       setDuration(Number.isFinite(nextDuration) ? nextDuration : 0);
       setIsLiveStream(!Number.isFinite(nextDuration) || nextDuration === Infinity || format === "hls" || format === "dash");
     };
-
     const handleLoaded = () => {
       updateDuration();
       setIsLoading(false);
@@ -295,11 +301,12 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
     };
     const handleWaiting = () => {
       setIsBuffering(true);
-      safeSetStatus("Buffering…");
+      setStatusMessage("Buffering…");
       showControls(true);
     };
     const handlePlaying = () => {
       setIsPlaying(true);
+      setAutoplayBlocked(false);
       setIsLoading(false);
       setIsBuffering(false);
       setStatusMessage("");
@@ -344,19 +351,16 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
         hlsRef.current = hls;
         hls.loadSource(activeUrl);
         hls.attachMedia(video);
-
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           const levels = hls.levels.map((level, index) => ({ index, label: level.height ? `${level.height}p` : `Level ${index + 1}` }));
           setQualityLevels(levels);
           setIsLoading(false);
           setIsBuffering(false);
           setStatusMessage("");
-          video.play().catch(() => setIsPlaying(false));
+          tryPlay(video);
         });
-
         hls.on(Hls.Events.ERROR, (_, data) => {
           if (!data.fatal) return;
-
           if (retryCountRef.current < MAX_RETRIES_PER_SOURCE) {
             retryCountRef.current += 1;
             if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
@@ -370,13 +374,12 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
               return;
             }
           }
-
           setStatusMessage("HLS stream is unavailable. Trying backup source…");
           tryNextSource();
         });
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         video.src = activeUrl;
-        video.play().catch(() => setIsPlaying(false));
+        tryPlay(video);
       } else {
         setErrorMessage("Your browser does not support HLS playback.");
         setIsLoading(false);
@@ -404,7 +407,7 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
         });
     } else if (format === "mp4" || format === "mpegts" || format === "mkv") {
       video.src = activeUrl;
-      video.play().catch(() => setIsPlaying(false));
+      tryPlay(video);
     } else {
       setErrorMessage("Unsupported stream format. Please add a format or use an HLS/MP4/DASH link.");
       setIsLoading(false);
@@ -428,7 +431,7 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
       video.removeAttribute("src");
       video.load();
     };
-  }, [activeUrl, canTryBackup, destroyPlayers, format, isIframe, isMuted, playbackRate, resetPlaybackState, safeSetStatus, showControls, sourceIndex, tryNextSource, volume]);
+  }, [activeUrl, canTryBackup, destroyPlayers, format, isIframe, isMuted, playbackRate, reloadNonce, resetPlaybackState, showControls, sourceIndex, tryNextSource, tryPlay, volume]);
 
   useEffect(() => {
     const handleFullscreenChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
@@ -443,7 +446,7 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
       video?.removeEventListener("enterpictureinpicture", handlePiPEnter);
       video?.removeEventListener("leavepictureinpicture", handlePiPLeave);
     };
-  }, []);
+  }, [reloadNonce]);
 
   const handleVolumeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const video = videoRef.current;
@@ -453,18 +456,13 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
     video.muted = nextVolume === 0;
     showControls();
   };
-
   const handleQualityChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const nextQuality = Number(event.target.value);
     setSelectedQuality(nextQuality);
     if (hlsRef.current) hlsRef.current.currentLevel = nextQuality;
     showControls();
   };
-
-  const handleSourceChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    switchSource(Number(event.target.value));
-  };
-
+  const handleSourceChange = (event: ChangeEvent<HTMLSelectElement>) => switchSource(Number(event.target.value));
   const handlePlaybackRateChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const nextRate = Number(event.target.value);
     const video = videoRef.current;
@@ -472,71 +470,36 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
     if (video) video.playbackRate = nextRate;
     showControls();
   };
-
   const seek = (event: ChangeEvent<HTMLInputElement>) => {
     const video = videoRef.current;
     if (!video || !canSeek) return;
     video.currentTime = (Number(event.target.value) / 100) * duration;
     showControls();
   };
-
   const seekBy = useCallback((seconds: number) => {
     const video = videoRef.current;
     if (!video || !canSeek) return;
     video.currentTime = Math.min(Math.max(video.currentTime + seconds, 0), duration);
     showControls();
   }, [canSeek, duration, showControls]);
-
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (isTypingTarget(event.target)) return;
     if ([" ", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) event.preventDefault();
-
     switch (event.key.toLowerCase()) {
-      case " ":
-        togglePlay();
-        break;
-      case "m":
-        toggleMute();
-        break;
-      case "f":
-        toggleFullscreen();
-        break;
-      case "arrowleft":
-        seekBy(-10);
-        break;
-      case "arrowright":
-        seekBy(10);
-        break;
-      case "arrowup": {
-        const video = videoRef.current;
-        if (video) video.volume = Math.min(video.volume + 0.1, 1);
-        break;
-      }
-      case "arrowdown": {
-        const video = videoRef.current;
-        if (video) video.volume = Math.max(video.volume - 0.1, 0);
-        break;
-      }
-      case "p":
-        togglePictureInPicture();
-        break;
-      case "escape":
-        if (document.fullscreenElement) document.exitFullscreen().catch(console.error);
-        break;
+      case " ": togglePlay(); break;
+      case "m": toggleMute(); break;
+      case "f": toggleFullscreen(); break;
+      case "arrowleft": seekBy(-10); break;
+      case "arrowright": seekBy(10); break;
+      case "arrowup": { const video = videoRef.current; if (video) video.volume = Math.min(video.volume + 0.1, 1); break; }
+      case "arrowdown": { const video = videoRef.current; if (video) video.volume = Math.max(video.volume - 0.1, 0); break; }
+      case "p": togglePictureInPicture(); break;
+      case "escape": if (document.fullscreenElement) document.exitFullscreen().catch(console.error); break;
     }
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="relative h-full w-full overflow-hidden bg-black text-white outline-none group/player"
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-      onMouseMove={() => showControls()}
-      onTouchStart={() => showControls()}
-      onFocus={() => showControls(true)}
-      aria-label={`${channel.name} video player`}
-    >
+    <div ref={containerRef} className="relative h-full w-full overflow-hidden bg-black text-white outline-none group/player" tabIndex={0} onKeyDown={handleKeyDown} onMouseMove={() => showControls()} onTouchStart={() => showControls()} onFocus={() => showControls(true)} aria-label={`${channel.name} video player`}>
       {isIframe ? (
         <iframe src={activeUrl} title={`${channel.name} player`} className="h-full w-full border-0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
       ) : (
@@ -568,55 +531,30 @@ export default function UniversalPlayer({ url, channel, isMini = false }: Univer
         </div>
       )}
 
-      <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/65 to-transparent p-3 transition-opacity duration-300 ${controlsShouldShow ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-        {!isMini && !isIframe && (
-          <input type="range" min="0" max="100" value={progress} disabled={!canSeek} onChange={seek} className="mb-3 w-full accent-red-600 disabled:opacity-40" aria-label="Playback position" />
-        )}
+      {autoplayBlocked && !errorMessage && (
+        <button onClick={togglePlay} className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-sm font-black uppercase tracking-wider text-white shadow-2xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400">
+          <Play className="h-5 w-5 fill-current" /> Tap to Play
+        </button>
+      )}
 
+      <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/65 to-transparent p-3 transition-opacity duration-300 ${controlsShouldShow ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+        {!isMini && !isIframe && <input type="range" min="0" max="100" value={progress} disabled={!canSeek} onChange={seek} className="mb-3 w-full accent-red-600 disabled:opacity-40" aria-label="Playback position" />}
         <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-black/35 p-2 backdrop-blur-md md:flex-nowrap">
           {!isIframe && (
             <>
-              <button onClick={togglePlay} className="rounded-full bg-white/10 p-3 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400 md:p-2" aria-label={isPlaying ? "Pause" : "Play"}>
-                {isPlaying ? <Pause className="h-5 w-5 fill-current" /> : <Play className="h-5 w-5 fill-current" />}
-              </button>
-              <button onClick={toggleMute} className="rounded-full bg-white/10 p-3 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400 md:p-2" aria-label={isMuted ? "Unmute" : "Mute"}>
-                {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-              </button>
+              <button onClick={togglePlay} className="rounded-full bg-white/10 p-3 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400 md:p-2" aria-label={isPlaying ? "Pause" : "Play"}>{isPlaying ? <Pause className="h-5 w-5 fill-current" /> : <Play className="h-5 w-5 fill-current" />}</button>
+              <button onClick={toggleMute} className="rounded-full bg-white/10 p-3 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400 md:p-2" aria-label={isMuted ? "Unmute" : "Mute"}>{isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}</button>
               {!isMini && <input type="range" min="0" max="1" step="0.05" value={isMuted ? 0 : volume} onChange={handleVolumeChange} className="hidden w-24 accent-red-600 sm:block" aria-label="Volume" />}
             </>
           )}
-
-          <div className="min-w-0 flex-1 px-2">
-            <p className="truncate text-xs font-black uppercase tracking-wider">{channel.name}</p>
-            <p className="text-[10px] text-zinc-400">Format: {formatLabel(format)} · Source {sourceIndex + 1}/{sources.length}{!isIframe ? ` · ${isLiveStream ? "LIVE" : `${formatTime(currentTime)} / ${formatTime(duration)}`}` : ""}</p>
-          </div>
-
-          {!isMini && sources.length > 1 && (
-            <select value={sourceIndex} onChange={handleSourceChange} className="max-w-[110px] rounded-lg border border-white/10 bg-black/70 px-2 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Source selector">
-              {sources.map((source, index) => <option key={source} value={index}>{index === 0 ? "Primary" : `Backup ${index}`}</option>)}
-            </select>
-          )}
-
-          {!isMini && format === "hls" && qualityLevels.length > 0 && (
-            <select value={selectedQuality} onChange={handleQualityChange} className="max-w-[110px] rounded-lg border border-white/10 bg-black/70 px-2 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Video quality">
-              <option value={-1}>Auto</option>
-              {qualityLevels.map((level) => <option key={level.index} value={level.index}>{level.label}</option>)}
-            </select>
-          )}
-
-          {!isMini && !isLiveStream && !isIframe && (
-            <select value={playbackRate} onChange={handlePlaybackRateChange} className="rounded-lg border border-white/10 bg-black/70 px-2 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Playback speed">
-              {PLAYBACK_RATES.map((rate) => <option key={rate} value={rate}>{rate}x</option>)}
-            </select>
-          )}
-
+          <div className="min-w-0 flex-1 px-2"><p className="truncate text-xs font-black uppercase tracking-wider">{channel.name}</p><p className="text-[10px] text-zinc-400">Format: {formatLabel(format)} · Source {sourceIndex + 1}/{sources.length}{!isIframe ? ` · ${isLiveStream ? "LIVE" : `${formatTime(currentTime)} / ${formatTime(duration)}`}` : ""}</p></div>
+          {!isMini && sources.length > 1 && <select value={sourceIndex} onChange={handleSourceChange} className="max-w-[110px] rounded-lg border border-white/10 bg-black/70 px-2 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Source selector">{sources.map((source, index) => <option key={source} value={index}>{index === 0 ? "Primary" : `Backup ${index}`}</option>)}</select>}
+          {!isMini && format === "hls" && qualityLevels.length > 0 && <select value={selectedQuality} onChange={handleQualityChange} className="max-w-[110px] rounded-lg border border-white/10 bg-black/70 px-2 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Video quality"><option value={-1}>Auto</option>{qualityLevels.map((level) => <option key={level.index} value={level.index}>{level.label}</option>)}</select>}
+          {!isMini && !isLiveStream && !isIframe && <select value={playbackRate} onChange={handlePlaybackRateChange} className="rounded-lg border border-white/10 bg-black/70 px-2 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Playback speed">{PLAYBACK_RATES.map((rate) => <option key={rate} value={rate}>{rate}x</option>)}</select>}
           {canTryBackup && !isMini && <button onClick={tryNextSource} className="hidden rounded-lg bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400 sm:block">Backup</button>}
           {sourceIndex > 0 && !isMini && <button onClick={() => switchSource(0)} className="hidden rounded-lg bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400 sm:block">Primary</button>}
           {supportsPiP && !isMini && <button onClick={togglePictureInPicture} className="rounded-lg bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400" aria-label="Toggle picture in picture">{isPictureInPicture ? "Exit PiP" : "PiP"}</button>}
-
-          <button onClick={toggleFullscreen} className="rounded-full bg-white/10 p-3 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400 md:p-2" aria-label="Toggle fullscreen">
-            {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
-          </button>
+          <button onClick={toggleFullscreen} className="rounded-full bg-white/10 p-3 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-400 md:p-2" aria-label="Toggle fullscreen">{isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}</button>
         </div>
       </div>
     </div>
