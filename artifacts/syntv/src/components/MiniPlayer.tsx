@@ -1,5 +1,6 @@
 import { usePlayer } from "@/context/PlayerContext";
 import HlsPlayer from "./HlsPlayer";
+import ChannelLogo from "./ChannelLogo";
 import { X, Maximize2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
@@ -38,8 +39,13 @@ export default function MiniPlayer() {
       </div>
       
       <div className="px-3 py-2 bg-zinc-900 border-t border-zinc-800 truncate flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-        <span className="text-sm font-medium text-white truncate">{currentChannel.name}</span>
+        <ChannelLogo channel={currentChannel} size="sm" className="shrink-0" />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" />
+            <span className="text-sm font-medium text-white truncate">{currentChannel.name}</span>
+          </div>
+        </div>
       </div>
     </div>
   );
