@@ -78,7 +78,6 @@ export default function WatchPage() {
       
       <div className="max-w-[1600px] mx-auto p-3 sm:p-4 md:p-8 flex flex-col lg:flex-row gap-4 md:gap-8">
         <div className="flex-1 min-w-0">
-          {/* Player */}
           <div 
             ref={playerWrapperRef}
             className="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800 relative z-10"
@@ -86,14 +85,12 @@ export default function WatchPage() {
             <HlsPlayer url={channel.url} channel={channel} />
           </div>
 
-          {/* Channel info */}
           <div className="mt-4 md:mt-8 flex items-start gap-3 md:gap-6">
             <ChannelLogo channel={channel} size="lg" className="shrink-0 shadow-lg hidden sm:block" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2 flex-wrap">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{channel.name}</h1>
                 <span className="live-badge shrink-0">LIVE</span>
-                {channel.quality && <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-black text-white">{channel.quality}</span>}
                 <HealthBadge channel={channel} />
               </div>
               <span className="inline-block px-3 py-1 bg-zinc-800 text-zinc-300 text-xs md:text-sm font-semibold rounded mb-3 md:mb-4">
@@ -107,11 +104,9 @@ export default function WatchPage() {
           </div>
         </div>
 
-        {/* Sidebar — full width below player on mobile, side column on desktop */}
         <div className="w-full lg:w-96 shrink-0">
           <h3 className="text-base md:text-xl font-bold text-white mb-3 md:mb-4 pl-2 border-l-4 border-red-600">More {channel.category}</h3>
           <div className="bg-card rounded-xl border border-card-border overflow-hidden">
-            {/* Mobile: horizontal scroll row */}
             <div className="flex lg:hidden overflow-x-auto gap-3 p-3 scrollbar-hide">
               {relatedChannels.slice(0, 12).map(rc => (
                 <Link key={rc.id} href={`/watch/${rc.id}`}>
@@ -123,7 +118,6 @@ export default function WatchPage() {
                 </Link>
               ))}
             </div>
-            {/* Desktop: vertical list */}
             <div className="hidden lg:flex flex-col max-h-[800px] overflow-y-auto scrollbar-hide">
               {relatedChannels.map(rc => (
                 <Link key={rc.id} href={`/watch/${rc.id}`}>
@@ -137,7 +131,6 @@ export default function WatchPage() {
                     <div className="flex-1 min-w-0">
                       <h4 className="text-white font-semibold truncate group-hover:text-red-500 transition">{rc.name}</h4>
                       <div className="mt-1 flex items-center gap-1.5">
-                        {rc.quality && <span className="text-[10px] font-bold text-zinc-500">{rc.quality}</span>}
                         <HealthBadge channel={rc} />
                       </div>
                     </div>
@@ -149,7 +142,6 @@ export default function WatchPage() {
         </div>
       </div>
 
-      {/* Sticky Mini Player when scrolled out of view */}
       {!playerVisible && (
         <div className="mini-player-container shadow-2xl border border-zinc-800 animate-in fade-in slide-in-from-bottom-8">
           <div className="flex h-[160px] sm:h-[180px] flex-col items-center justify-center bg-black p-4 text-center">
