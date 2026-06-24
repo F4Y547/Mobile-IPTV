@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import { type Channel } from "@/data/channels";
 import { allChannels as channels } from "@/data/allChannels";
 import { getChannelMeta } from "@/data/channelMeta";
-import HlsPlayer from "@/components/HlsPlayer";
+import UniversalPlayer from "@/components/UniversalPlayer";
 import ChannelLogo from "@/components/ChannelLogo";
 import BrokenChannelReport from "@/components/BrokenChannelReport";
 import { usePlayer } from "@/context/PlayerContext";
@@ -89,7 +89,7 @@ export default function WatchPage() {
             ref={playerWrapperRef}
             className="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800 relative z-10"
           >
-            <HlsPlayer url={playableChannel.url} channel={playableChannel} />
+            <UniversalPlayer url={playableChannel.url} channel={playableChannel} />
           </div>
 
           <div className="mt-4 md:mt-8 flex items-start gap-3 md:gap-6">
