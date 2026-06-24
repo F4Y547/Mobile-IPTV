@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
-import { channels } from "@/data/channels";
+import { allChannels as channels } from "@/data/allChannels";
 import ChannelLogo from "@/components/ChannelLogo";
 import { Search, Tv } from "lucide-react";
 
