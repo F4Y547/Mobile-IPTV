@@ -1,149 +1,116 @@
+import type { StreamFormat } from "@/lib/streamFormat";
+export type { StreamFormat };
+
 export type Channel = {
   id: string;
   name: string;
   category: string;
   url: string;
   logoUrl?: string;
+  format?: StreamFormat;
+  country?: string;
+  language?: string;
+  quality?: "SD" | "HD" | "FHD" | "4K";
+  headers?: Record<string, string>;
+  backupUrls?: string[];
+  isOfficial?: boolean;
+  isActive?: boolean;
 };
 
 export const channels: Channel[] = [
   // FIFA WORLD CUP 2026
-  { id: "fifa-wc-2026", name: "FIFA World Cup 2026", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/94/index.m3u8" },
-  { id: "world-cup-a2", name: "World Cup A2 🇧🇩", category: "Sports", url: "http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8" },
-  { id: "world-cup-s2", name: "World Cup S2", category: "Sports", url: "https://andro.226503.xyz/checklist/androstreamlivebs1.m3u8" },
-  { id: "fifa-live-bangla-india", name: "FIFA Live - Bangla 🇮🇳", category: "Sports", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD-video=2137600.m3u8" },
-  { id: "fifa-live-bangla-a-india", name: "FIFA Live - Bangla A 🇮🇳", category: "Sports", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8" },
-  { id: "go-live-sports", name: "Go Live Sports", category: "Sports", url: "https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8" },
-  { id: "go-live-sports-b", name: "Go Live Sports B", category: "Sports", url: "https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist_b4096000_slENG.m3u8" },
-
+  { id: "fifa-wc-2026", name: "FIFA World Cup 2026", category: "Sports", url: "http://84.17.50.102/fox/index.m3u8" },
   // KIDS
-  { id: "gopal-bhar", name: "Gopal Bhar TV", category: "Kids", url: "https://live20.bozztv.com/giatvplayout7/giatv-209611/tracks-v1a1/mono.ts.m3u8" },
+  { id: "gopal-bhar", name: "Gopal Bhar", category: "Kids", url: "https://live20.bozztv.com/giatvplayout7/giatv-209611/tracks-v1a1/mono.ts.m3u8" },
   { id: "motu-patlu", name: "Motu Patlu", category: "Kids", url: "https://live20.bozztv.com/giatvplayout7/giatv-209622/tracks-v1a1/mono.ts.m3u8" },
-  { id: "doraemon", name: "Doraemon TV", category: "Kids", url: "https://live20.bozztv.com/giatvplayout7/giatv-209902/tracks-v1a1/mono.ts.m3u8" },
-  { id: "tom-jerry", name: "Tom & Jerry TV", category: "Kids", url: "https://live20.bozztv.com/giatvplayout7/giatv-208314/tracks-v1a1/mono.ts.m3u8" },
-  { id: "mr-bean-animated", name: "Mr Bean Animated", category: "Kids", url: "https://amg00627-amg00627c29-rakuten-it-3989.playouts.now.amagi.tv/playlist/amg00627-banijayfast-mrbeanitcc-rakutenit/playlist.m3u8" },
-  { id: "zb-cartoon", name: "ZB Cartoon", category: "Kids", url: "http://103.180.212.191:3500/live/3321.m3u8" },
-  { id: "cartoon-network", name: "Cartoon Network", category: "Kids", url: "https://sflex07.fun/Sflex-Artl/CARTOON_NETWORK.m3u8" },
+  { id: "doraemon", name: "Doraemon", category: "Kids", url: "https://live20.bozztv.com/giatvplayout7/giatv-209902/tracks-v1a1/mono.ts.m3u8" },
+  { id: "zb-cartoon", name: "ZB Cartoon", category: "Kids", url: "https://server.zillarbarta.com/zbcatun/tracks-v1a1/mono.ts.m3u8" },
+  { id: "tom-jerry", name: "Tom & Jerry", category: "Kids", url: "https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8" },
+  { id: "cartoon-network", name: "Cartoon Network", category: "Kids", url: "https://live20.bozztv.com/giatvplayout7/giatv-209624/index.m3u8" },
   { id: "zoo-moo", name: "Zoo Moo", category: "Kids", url: "https://amg01553-blueantmediaasi-zoomoonz-samsungnz-rdufn.amagi.tv/playlist/amg01553-blueantmediaasi-zoomoonz-samsungnz/playlist.m3u8" },
-  { id: "rongeen-tv-kids", name: "Rongeen TV", category: "Kids", url: "http://103.180.212.191:3500/live/1667.m3u8" },
+  { id: "rongeen-tv-kids", name: "Rongeen TV", category: "Kids", url: "https://server.thelegitpro.in/rongeentv/rongeentv/tracks-v1a1/mono.m3u8" },
   { id: "jungle-book", name: "Jungle Book", category: "Kids", logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdYDuOawIs57oT6PcXREjNLnVUF58DK9qrsQ&s", url: "https://cc-4bhi5osabejc9.akamaized.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-4bhi5osabejc9/junglebook.m3u8" },
-
   // SPORTS
-  { id: "t-sports", name: "T Sports", category: "Sports", url: "http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8" },
-  { id: "t-sports-hd-2", name: "T Sports HD 2", category: "Sports", url: "http://198.195.239.50:8095/tsports/index.m3u8" },
+  { id: "t-sports", name: "T Sports", category: "Sports", url: "https://tvsen7.aynaott.com/tsportshd/index.m3u8" },
   { id: "gazi-tv-sports", name: "Gazi TV", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Gazi%20TV.jpg", url: "http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8" },
-  { id: "willow-hd", name: "Willow HD", category: "Sports", url: "https://tvsen5.aynaott.com/willowhd/tracks-v1a1/mono.ts.m3u8" },
+  { id: "willow-hd", name: "Willow HD", category: "Sports", url: "https://tvsen5.aynaott.com/willowhd/index.m3u8" },
   { id: "a-sports", name: "A Sports HD", category: "Sports", url: "https://tvsen6.aynaott.com/asports/tracks-v1a1/mono.ts.m3u8" },
   { id: "ptv-sports", name: "PTV Sports HD", category: "Sports", url: "https://tvsen5.aynaott.com/PtvSports/tracks-v1a1/mono.ts.m3u8" },
-  { id: "ptv-sports-b", name: "PTV Sports B 🇵🇰", category: "Sports", url: "http://stalker.hakunamata.workers.dev/play/1099/index.m3u8" },
-  { id: "star-sports-1-hd", name: "Star Sports 1 HD", category: "Sports", url: "https://sflex07.fun/Sflex-Artl/STAR_SPORTS_1_HD.m3u8" },
+  { id: "star-sports-1-hd", name: "Star Sports 1 HD", category: "Sports", url: "http://103.253.18.58:8000/play/a00m" },
   { id: "star-sports-1-hindi", name: "Star Sports 1 Hindi", category: "Sports", url: "http://103.253.18.58:8000/play/a03o" },
-  { id: "star-sports-2-hindi", name: "Star Sports 2 Hindi HD", category: "Sports", url: "http://103.180.212.191:3500/live/1984.m3u8" },
-  { id: "bein-sports", name: "Bein Sports", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8" },
-  { id: "fox-sports-fifa-2026", name: "Fox Sports - FIFA 2026", category: "Sports", url: "http://84.17.50.102/fox/index.m3u8" },
-  { id: "fox-sports-1-fifa-2026", name: "Fox Sports 1 - FIFA 2026", category: "Sports", url: "http://41.223.30.230/FOXSPORTS1/tracks-v1a1/mono.m3u8" },
-  { id: "caze-tv", name: "Caze TV 🇧🇷 Brazil", category: "Sports", url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8" },
-  { id: "win-sports", name: "Win Sports", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8" },
-  { id: "dazn-direct", name: "Dazn Direct", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/94/index.m3u8" },
-  { id: "tvp-sports", name: "TVP Sports", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/89/index.m3u8" },
-  { id: "d-sports", name: "D Sports", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8" },
-  { id: "tyc-sports", name: "TYC Sports", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/84/index.m3u8" },
-  { id: "tv-azteca", name: "TV Azteca", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/117/index.m3u8" },
-  { id: "tudn-sports", name: "Tudn Sports 🇲🇽", category: "Sports", url: "https://1nyaler.streamhostingcdn.top/stream/52/index.m3u8" },
-  { id: "max-hd", name: "MAX HD", category: "Sports", url: "https://webott.viatv.com.np/v0t1/CineplexHD.stream/chunks.m3u8" },
-  { id: "sony-sports-ten-3", name: "Sony Sports Ten 3 HD", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/56e54462053b1b278b80b532c89c01f17e360fd5/Sony%20Sports%20Ten%203.png", url: "https://sflex07.fun/Sflex-Artl/464.m3u8" },
+  { id: "star-sports-2-hindi", name: "Star Sports 2 Hindi HD", category: "Sports", url: "http://103.157.248.140:8000/play/a01m/index.m3u8" },
+  { id: "sony-sports-ten-3", name: "Sony Sports Ten 3 HD", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/56e54462053b1b278b80b532c89c01f17e360fd5/Sony%20Sports%20Ten%203.png", url: "http://103.99.249.139/sonyten3/index.m3u8" },
   { id: "sony-sports-ten-5", name: "Sony Sports Ten 5", category: "Sports", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/56e54462053b1b278b80b532c89c01f17e360fd5/Sony%20Sports%20Ten%205.png", url: "http://103.99.249.139/sonyten3/index.m3u8" },
-  { id: "dd-sports", name: "DD Sports", category: "Sports", url: "https://cdn-6.pishow.tv/live/13/master.m3u8" },
+  { id: "dd-sports", name: "DD Sports", category: "Sports", url: "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index.m3u8" },
   { id: "fifa-plus", name: "FIFA+", category: "Sports", url: "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8" },
-  { id: "fifa-french", name: "FIFA+ French", category: "Sports", url: "https://37b4c228.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblWZyX0ZJRkFQbHVzRnJlbmNoX0hMUw/playlist.m3u8" },
+  { id: "fifa-french", name: "FIFA+ French", category: "Sports", url: "https://37b4c228.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWZyX0ZJRkFQbHVzRnJlbmNoX0hMUw/playlist.m3u8" },
   { id: "fifa-usa", name: "FIFA+ USA", category: "Sports", url: "https://d2w9q46ikgrcwx.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-of5cbk3sav3w5/v1/sysdata_s_p_a_fifa_7/samsungheadend_us/latest/main/hls/playlist.m3u8" },
   { id: "fifa-women", name: "FIFA+ Women", category: "Sports", url: "https://cffda8ff.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1nYl9GSUZBUGx1c3dvbWVuX0hMUw/playlist.m3u8" },
-
   // DOCUMENTARY
   { id: "discovery-bangla", name: "Discovery Bangla", category: "Documentary", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Discovery%20.png", url: "http://202.70.146.135:8000/play/a05z/index.m3u8" },
   { id: "nat-geo", name: "Nat Geo HD", category: "Documentary", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/National%20Geographic%20Channel.png", url: "http://202.70.146.135:8000/play/a05o/index.m3u8" },
-  { id: "wild-earth", name: "Wild Earth", category: "Documentary", url: "http://103.180.212.191:3500/live/2437.m3u8" },
+  { id: "wild-earth", name: "Wild Earth", category: "Documentary", url: "https://wildearth-plex.amagi.tv/master.m3u8" },
   { id: "outdoor-channel", name: "Outdoor Channel", category: "Documentary", logoUrl: "https://i.ibb.co/jZ2NVqN/outdoorch.png", url: "https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg00718-outdoorchannela-outdoortvnz-samsungnz/playlist.m3u8" },
   { id: "real-wild", name: "Real Wild", category: "Documentary", logoUrl: "https://i.ibb.co/sRhcqHT/realwild.png", url: "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg00426-littledotstudio-realwild-tcl/playlist.m3u8" },
   { id: "insight", name: "Insight TV", category: "Documentary", logoUrl: "https://business.insight.tv/wp-content/uploads/7521/01/Insight-TV-Logo-small-150x150.png", url: "https://insighttv-samsung-us.amagi.tv/playlist.m3u8" },
   { id: "travelxp", name: "TravelXP", category: "Documentary", url: "https://travelxp-travelxp-1-eu.rakuten.wurl.tv/playlist.m3u8" },
-  { id: "food-food", name: "Food Food", category: "Documentary", url: "http://103.180.212.191:3500/live/561.m3u8" },
-  { id: "cgtn-doc", name: "CGTN Documentary", category: "Documentary", url: "https://global.cgtn.cicc.media.caton.cloud/master/cgtn-documentary_myco.m3u8" },
-
+  { id: "food-food", name: "Food Food", category: "Documentary", url: "http://103.175.73.12:8080/live/143/143_0.m3u8" },
+  { id: "cgtn-doc", name: "CGTN Documentary", category: "Documentary", url: "https://english-livebkali.cgtn.com/live/doccgtn_1.m3u8" },
   // ENTERTAINMENT
-  { id: "star-jalsha-3", name: "Star Jalsha 3", category: "Entertainment", url: "https://yupptvcatchupire.yuppcdn.net/preview/starjalsha/1800.m3u8" },
-  { id: "enter10-bangla", name: "Enter10 Bangla", category: "Entertainment", url: "https://amg01448-samsungin-enterr10bangla-samsungin-ad-gg.amagi.tv/playlist/amg01448-samsungin-enterr10bangla-samsungin/playlist.m3u8" },
   { id: "bangla-vision", name: "Bangla Vision", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8" },
-  { id: "ntv", name: "N TV", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8" },
+  { id: "ntv", name: "NTV", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8" },
   { id: "boishakhi-tv", name: "Boishakhi TV", category: "Entertainment", url: "https://boishakhi.sonarbanglatv.com/boishakhi/boishakhitv/index.m3u8" },
-  { id: "maasranga-tv", name: "Machranga", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8" },
+  { id: "maasranga-tv", name: "Maasranga TV", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8" },
   { id: "ekushey-tv", name: "Ekushey TV", category: "Entertainment", url: "http://210.4.72.204/hls-live/livepkgr/_definst_/liveevent/livestream3.m3u8" },
-  { id: "atn-bangla", name: "ATN Bangla", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8" },
+  { id: "atn-bangla", name: "ATN Bangla", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8" },
   { id: "my-tv", name: "MY TV", category: "Entertainment", url: "https://mytvbangla.com/0.m3u8" },
   { id: "deshi-tv", name: "Deshi TV", category: "Entertainment", url: "https://deshitv.deshitv24.net/live/myStream/playlist.m3u8" },
   { id: "btv", name: "BTV", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8" },
-  { id: "btv-b", name: "BTV B 🇧🇩", category: "Entertainment", url: "https://tv.beyondtaxconsultants.com/api/btv/btv.m3u8" },
-  { id: "channel-9", name: "Channel 9", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8" },
-  { id: "sa-tv", name: "SA TV", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/index.m3u8" },
+  { id: "channel-9", name: "Channel 9 HD", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8" },
+  { id: "sa-tv", name: "SA TV", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/1720-audio_113502_eng=113200-video=3224800.m3u8" },
   { id: "green-tv", name: "Green TV", category: "Entertainment", url: "https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/greentv.stream/live-orgin/greentv.stream/playlist.m3u8" },
   { id: "drama-24", name: "Drama 24", category: "Entertainment", url: "https://vods2.aynascope.net/gseriesDrama/index.m3u8" },
-  { id: "deepto-tv", name: "Deepto TV", category: "Entertainment", url: "https://byphdgllyk.gpcdn.net/hls/deeptotv/0_1/index.m3u8" },
-  { id: "deepto-gpcdn", name: "Deepto", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8" },
-  { id: "channel-i-hd", name: "Channel I", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8" },
-  { id: "channel-s-tv", name: "Channel S TV", category: "Entertainment", url: "https://app.ncare.live/live-orgin/channels.stream/live-orgin/channels.stream/chunks.m3u8" },
-  { id: "global-tv", name: "Global TV", category: "Entertainment", url: "https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/Global-tv.stream/tracks-v1a1/mono.m3u8" },
-  { id: "ayna-tv", name: "Ayna TV", category: "Entertainment", url: "https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/ayna.stream/tracks-v1a1/mono.m3u8" },
-
+  { id: "deepto-tv", name: "Deepto TV HD", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8" },
+  { id: "channel-i-hd", name: "Channel I HD", category: "Entertainment", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8" },
   // NEWS
-  { id: "jamuna-tv", name: "Jumuna TV", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8" },
+  { id: "jamuna-tv", name: "Jamuna TV", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8" },
   { id: "somoy-tv", name: "Somoy TV", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
-  { id: "somoy-tv-b", name: "Somoy TV B 🇧🇩", category: "News", url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8" },
-  { id: "channel-1-news", name: "Channel 1", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
-  { id: "channel-24", name: "Channel 24", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8" },
-  { id: "independent-tv", name: "Independent TV", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8" },
-  { id: "ekattor-hd", name: "Ekattor", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8" },
+  { id: "ekattor-hd", name: "Ekattor HD", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8" },
+  { id: "channel-24", name: "Channel 24 HD", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8" },
   { id: "atn-news", name: "ATN News", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8" },
-  { id: "btv-1707", name: "BTV 1707", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1707/output/index.m3u8" },
-  { id: "news-24", name: "News24", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8" },
-  { id: "star-news", name: "Star News", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8" },
-  { id: "jago-news-24", name: "Jago News 24", category: "News", url: "https://app.ncare.live/live-orgin/jagonews24.stream/live-orgin/jagonews24.stream/chunks.m3u8" },
-  { id: "cnn-now", name: "CNN Now", category: "News", url: "https://amg01448-samsungin-cnnnow-samsungin-4npqg.amagi.tv/playlist/amg01448-samsungin-cnnnow-samsungin/playlist.m3u8" },
-  { id: "dw-english-hd", name: "DW English HD", category: "News", url: "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8" },
-  { id: "dbc-news", name: "DBC News", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8" },
-
+  { id: "independent-tv", name: "Independent TV", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8" },
+  { id: "news-24", name: "News 24 HD", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8" },
+  { id: "dbc-news", name: "DBC News HD", category: "News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8" },
   // RELIGIOUS
   { id: "peace-tv-bangla", name: "Peace TV Bangla", category: "Religious", logoUrl: "https://i.ibb.co/Gfw89mC/20240804-033102.png", url: "https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v2a1/mono.m3u8" },
   { id: "makka-live", name: "Makka Live", category: "Religious", url: "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8" },
   { id: "madina-live", name: "Madina Live", category: "Religious", url: "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8" },
   { id: "saudi-quran", name: "Saudi Quran", category: "Religious", url: "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8" },
   { id: "azan-tv", name: "Azan TV", category: "Religious", url: "https://dbcanada.sonarbanglatv.com/azantv/atv/index.m3u8" },
-  { id: "madani-tv", name: "Madani TV", category: "Religious", url: "https://s1.ideationtec.live/Madani_TV/Madani_TV.m3u8" },
+  { id: "madani-tv", name: "Madani TV", category: "Religious", url: "https://streaming.madanichannel.tv/static/streaming-playlists/hls/d3e49b76-ac06-4689-a641-9200445b647f/master.m3u8" },
   { id: "islamic-tv", name: "Islamic TV", category: "Religious", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8" },
   { id: "al-quran", name: "Al Quran", category: "Religious", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8" },
-  { id: "bpk-tv-1713", name: "BPK TV 1713", category: "Religious", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8" },
-
   // MOVIES
   { id: "amar-bangla", name: "Amar Bangla", category: "Movies", logoUrl: "https://i.ibb.co/CPmLfGs/Amar-Bangla.png", url: "https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/amarbanglatv.stream/playlist.m3u8" },
-  { id: "zb-cinema", name: "ZB Cinema", category: "Movies", url: "http://103.180.212.191:3500/live/3322.m3u8" },
+  { id: "zb-cinema", name: "ZB Cinema", category: "Movies", url: "https://server.zillarbarta.com/ZBCINEMA/tracks-v1a1/mono.ts.m3u8" },
   { id: "star-gold", name: "Star Gold", category: "Movies", url: "http://103.99.249.139/stargold/tracks-v1a1/mono.m3u8" },
   { id: "zee-anmol", name: "Zee Anmol TV", category: "Movies", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Zee_Anmol_Cinema_logo.png", url: "http://103.175.73.12:8080/live/256/256_0.m3u8" },
   { id: "zee-cinema", name: "Zee Cinema HD", category: "Movies", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Zee%20Cinema.png", url: "http://103.99.249.139/zeecinema/index.m3u8" },
   { id: "zee-action", name: "Zee Action", category: "Movies", logoUrl: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Zee%20Action.png", url: "http://103.175.73.12:8080/live/270/270_0.m3u8" },
   { id: "goldmines", name: "Goldmines", category: "Movies", url: "https://cdn-2.pishow.tv/live/1459/master.m3u8" },
-  { id: "goldmines-movies", name: "Goldmines Movies", category: "Movies", url: "https://sflex07.fun/Sflex-Artl/1499.m3u8" },
+  { id: "goldmines-movies", name: "Goldmines Movies", category: "Movies", url: "https://cdn-2.pishow.tv/live/1461/master.m3u8" },
   { id: "movie-sphere", name: "Movie Sphere", category: "Movies", url: "https://moviesphereuk-samsunguk.amagi.tv/playlist.m3u8" },
   { id: "action-hollywood", name: "Action Hollywood", category: "Movies", url: "https://amg01076-lightningintern-actionhollywood-samsungnz-82rry.amagi.tv/playlist/amg01076-lightningintern-actionhollywood-samsungnz/playlist.m3u8" },
   { id: "crimes-channel", name: "Crimes", category: "Movies", url: "https://nomawnoijl.gpcdn.net/akash/crimes/playlist.m3u8" },
   { id: "cineedge", name: "Cineedge HD", category: "Movies", url: "https://nomawnoijl.gpcdn.net/akash/cineedge/playlist.m3u8" },
   { id: "superrix", name: "Superrix HD", category: "Movies", url: "https://nomawnoijl.gpcdn.net/akash/superrix/playlist.m3u8" },
-
   // MUSIC
   { id: "music-bangla", name: "Music Bangla", category: "Music", url: "http://live.matribhumitv.com/music-bangla/index.m3u8" },
   { id: "music-mastii", name: "Music Mastii", category: "Music", url: "https://live20.bozztv.com/giatvplayout7/giatv-209592/tracks-v1a1/mono.ts.m3u8" },
-  { id: "sangeet-bangla", name: "Sangeet Bangla", category: "Music", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Sangeetbangla/default/Sangeetbangla.m3u8" },
-  { id: "9xm", name: "9XM", category: "Music", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/9XM/default/9XM.m3u8" },
-  { id: "music-india", name: "Music India", category: "Music", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Musicindia/default/Musicindia.m3u8" },
+  { id: "sangeet-bangla", name: "Sangeet Bangla", category: "Music", url: "https://cdn-4.pishow.tv/live/1143/master.m3u8" },
+  { id: "9xm", name: "9XM", category: "Music", url: "http://103.175.73.12:8080/live/155/155_0.m3u8" },
+  { id: "music-india", name: "Music India", category: "Music", url: "https://cdn-2.pishow.tv/live/226/master.m3u8" },
   { id: "yrf-music", name: "YRF Music HD", category: "Music", url: "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01412-xiaomiasia-yrfmusic-xiaomi/playlist.m3u8" },
-  { id: "e24", name: "E24", category: "Music", logoUrl: "https://i.ibb.co/dbjnG3X/20240803-105403.png", url: "https://bagnetwork.digivive.com/hlslive/Admin/px09241091/live/E24LiveB/master_1.m3u8" },
+  { id: "e24", name: "E24", category: "Music", logoUrl: "https://i.ibb.co/dbjnG3X/20240803-105403.png", url: "http://103.175.73.12:8080/live/159/159_0.m3u8" },
   { id: "party-universe", name: "Party Universe", category: "Music", url: "https://nomawnoijl.gpcdn.net/akash/partyuniverse/playlist.m3u8" },
 ];
