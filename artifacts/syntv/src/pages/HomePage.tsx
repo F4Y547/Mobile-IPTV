@@ -4,11 +4,15 @@ import MatchScheduleBanner from "@/components/MatchScheduleBanner";
 import { channels } from "@/data/channels";
 import { Link } from "wouter";
 import { Play, Sparkles, Trophy } from "lucide-react";
+import { usePageMeta } from "@/lib/usePageMeta";
 
 export default function HomePage() {
+  usePageMeta({
+    title: "SYNTV Online | Live TV, Sports, News and World Cup Streams",
+    description: "Watch live TV channels, sports, news, entertainment, kids content, documentaries and World Cup streams on SYNTV Online.",
+  });
+
   const categories = ["Sports", "Entertainment", "Movies", "Kids", "Documentary", "News", "Religious", "Music"];
-  
-  const featuredChannel = channels.find(c => c.id === "fifa-wc-2026");
 
   return (
     <div className="min-h-screen bg-background pb-20">
