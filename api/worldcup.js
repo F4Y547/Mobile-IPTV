@@ -13,6 +13,20 @@ async function fetchJson(url, headers) {
   return apiResponse.json();
 }
 
+function asArray(value) {
+  if (Array.isArray(value)) return value;
+  if (!value || typeof value !== "object") return [];
+  for (const key of ["data", "results", "items", "games", "matches", "teams", "stadiums", "groups"]) {
+    if (Array.isArray(value[key])) return value[key];
+  }
+  return [];
+}
+
+function sampleKeys(value) {
+  const first = asArray(value)[0];
+  return first && typeof first === "object" ? Object.keys(first).slice(0, 40) : [];
+}
+
 module.exports = async function handler(request, response) {
   if (request.method === "OPTIONS") {
     response.setHeader("Access-Control-Allow-Origin", "*");
@@ -43,13 +57,29 @@ module.exports = async function handler(request, response) {
       fetchJson(`${baseUrl}/get/groups`, headers),
     ]);
 
+    const gamesValue = games.status === "fulfilled" ? games.value : [];
+    const teamsValue = teams.status === "fulfilled" ? teams.value : [];
+    const stadiumsValue = stadiums.status === "fulfilled" ? stadiums.value : [];
+    const groupsValue = groups.status === "fulfilled" ? groups.value : [];
+
     const payload = {
       source: baseUrl,
       updatedAt: new Date().toISOString(),
-      games: games.status === "fulfilled" ? games.value : [],
-      teams: teams.status === "fulfilled" ? teams.value : [],
-      stadiums: stadiums.status === "fulfilled" ? stadiums.value : [],
-      groups: groups.status === "fulfilled" ? groups.value : [],
+      apiKeyConfigured: Boolean(apiKey),
+      games: gamesValue,
+      teams: teamsValue,
+      stadiums: stadiumsValue,
+      groups: groupsValue,
+      diagnostics: {
+        gamesCount: asArray(gamesValue).length,
+        teamsCount: asArray(teamsValue).length,
+        stadiumsCount: asArray(stadiumsValue).length,
+        groupsCount: asArray(groupsValue).length,
+        gameKeys: sampleKeys(gamesValue),
+        teamKeys: sampleKeys(teamsValue),
+        stadiumKeys: sampleKeys(stadiumsValue),
+        groupKeys: sampleKeys(groupsValue),
+      },
       errors: [games, teams, stadiums, groups]
         .map((result) => (result.status === "rejected" ? result.reason?.message : null))
         .filter(Boolean),
@@ -65,6 +95,16 @@ module.exports = async function handler(request, response) {
       teams: [],
       stadiums: [],
       groups: [],
+      diagnostics: {
+        gamesCount: 0,
+        teamsCount: 0,
+        stadiumsCount: 0,
+        groupsCount: 0,
+        gameKeys: [],
+        teamKeys: [],
+        stadiumKeys: [],
+        groupKeys: [],
+      },
     });
   }
 };
