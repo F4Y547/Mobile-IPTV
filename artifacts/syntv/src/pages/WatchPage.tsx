@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import { channels, type Channel } from "@/data/channels";
 import HlsPlayer from "@/components/HlsPlayer";
 import ChannelLogo from "@/components/ChannelLogo";
+import BrokenChannelReport from "@/components/BrokenChannelReport";
 import { usePlayer } from "@/context/PlayerContext";
 import { checkChannelHealth, type ChannelHealth } from "@/lib/channelHealth";
 import NotFound from "./not-found";
@@ -100,6 +101,7 @@ export default function WatchPage() {
                 Currently streaming {channel.name} live on SYNTV Online. Enjoy premium quality content without interruptions. 
                 Experience the best in {channel.category.toLowerCase()} entertainment.
               </p>
+              <BrokenChannelReport channel={channel} />
             </div>
           </div>
         </div>
