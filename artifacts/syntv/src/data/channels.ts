@@ -8,7 +8,7 @@ export type Channel = {
 
 export const channels: Channel[] = [
   // FIFA WORLD CUP 2026
-  { id: "fifa-wc-2026", name: "FIFA World Cup 2026", category: "Sports", url: "https://d1211whpimeups.cloudfront.net/smil:rtbgo/chunklist.m3u8" },
+  { id: "fifa-wc-2026", name: "FIFA World Cup 2026", category: "Sports", url: "http://114.130.57.233:8080/TsportHD/tracks-v1a1/mono.m3u8?token=SkQuhAXZxgBan1" },
   { id: "world-cup-a2", name: "World Cup A2 🇧🇩", category: "Sports", url: "http://198.195.239.50:8095/tsports/tracks-v1a1/mono.m3u8" },
   { id: "world-cup-s2", name: "World Cup S2", category: "Sports", url: "https://andro.226503.xyz/checklist/androstreamlivebs1.m3u8" },
   { id: "fifa-live-bangla-india", name: "FIFA Live - Bangla 🇮🇳", category: "Sports", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD-video=2137600.m3u8" },
