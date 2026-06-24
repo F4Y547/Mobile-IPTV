@@ -1,14 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/search</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/category/sports</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/category/news</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/category/entertainment</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/category/movies</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/category/kids</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/category/documentary</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/category/religious</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/category/music</loc></url>
-  <url><loc>https://mobile-iptv-matheen-online.vercel.app/watch/fifa-wc-2026</loc></url>
+  <!-- Core pages -->
+  <url><loc>https://mobile-iptv.vercel.app/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/search</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+
+  <!-- Category pages -->
+  <url><loc>https://mobile-iptv.vercel.app/category/sports</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/category/news</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/category/entertainment</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/category/movies</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/category/kids</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/category/documentary</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/category/religious</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/category/music</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+
+  <!-- Sports channels -->
+  <url><loc>https://mobile-iptv.vercel.app/watch/fifa-wc-2026</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/t-sports</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/gazi-tv-sports</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/willow-hd</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/a-sports</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/ptv-sports</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/star-sports-1-hd</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/star-sports-1-hindi</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/star-sports-2-hindi</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/sony-sports-ten-3</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/sony-sports-ten-5</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/dd-sports</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/fifa-plus</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/fifa-french</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/fifa-usa</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/fifa-women</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/caze-tv-fifa-world-cup-2026</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+
+  <!-- Kids channels -->
+  <url><loc>https://mobile-iptv.vercel.app/watch/gopal-bhar</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/motu-patlu</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/doraemon</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/zb-cartoon</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/tom-jerry</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/cartoon-network</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/zoo-moo</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/rongeen-tv-kids</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/jungle-book</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+
+  <!-- Documentary channels -->
+  <url><loc>https://mobile-iptv.vercel.app/watch/discovery-bangla</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/nat-geo</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/wild-earth</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/outdoor-channel</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/real-wild</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/insight</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/travelxp</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/food-food</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/cgtn-doc</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+
+  <!-- Entertainment channels -->
+  <url><loc>https://mobile-iptv.vercel.app/watch/bangla-vision</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/ntv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/boishakhi-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/maasranga-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/ekushey-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/atn-bangla</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/my-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/deshi-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/btv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/channel-9</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/sa-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/green-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/drama-24</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/deepto-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/channel-i-hd</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+
+  <!-- News channels -->
+  <url><loc>https://mobile-iptv.vercel.app/watch/jamuna-tv</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/somoy-tv</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/ekattor-hd</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/channel-24</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/atn-news</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/independent-tv</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/news-24</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/dbc-news</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+
+  <!-- Religious channels -->
+  <url><loc>https://mobile-iptv.vercel.app/watch/peace-tv-bangla</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/makka-live</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/madina-live</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/saudi-quran</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/azan-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/madani-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/islamic-tv</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/al-quran</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+
+  <!-- Movies channels -->
+  <url><loc>https://mobile-iptv.vercel.app/watch/amar-bangla</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/zb-cinema</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/star-gold</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/zee-anmol</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/zee-cinema</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/zee-action</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/goldmines</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/goldmines-movies</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/movie-sphere</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/action-hollywood</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/crimes-channel</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/cineedge</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/superrix</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+
+  <!-- Music channels -->
+  <url><loc>https://mobile-iptv.vercel.app/watch/music-bangla</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/music-mastii</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/sangeet-bangla</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/9xm</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/music-india</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/yrf-music</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/e24</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mobile-iptv.vercel.app/watch/party-universe</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
 </urlset>
