@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import CategoryRow from "@/components/CategoryRow";
 import MatchScheduleBanner from "@/components/MatchScheduleBanner";
-import { channels } from "@/data/channels";
+import { allChannels as channels } from "@/data/allChannels";
 import { Link } from "wouter";
 import { Play, Sparkles, Trophy } from "lucide-react";
 import { usePageMeta } from "@/lib/usePageMeta";
