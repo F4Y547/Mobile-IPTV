@@ -7,6 +7,8 @@ type CacheEntry = {
   checkedAt: number;
 };
 
+type ChannelWithBackups = Channel & { backupUrls?: string[] };
+
 const HEALTH_CACHE_TTL_MS = 3 * 60 * 1000;
 const REQUEST_TIMEOUT_MS = 4500;
 const cache = new Map<string, CacheEntry>();
@@ -46,7 +48,8 @@ export async function checkChannelHealth(channel: Channel): Promise<ChannelHealt
   const cached = cache.get(channel.id);
   if (cached && Date.now() - cached.checkedAt < HEALTH_CACHE_TTL_MS) return cached.status;
 
-  const urls = [channel.url, ...(channel.backupUrls || [])].filter(Boolean);
+  const channelWithBackups = channel as ChannelWithBackups;
+  const urls = [channel.url, ...(channelWithBackups.backupUrls || [])].filter(Boolean);
   let finalStatus: ChannelHealth = "unknown";
 
   for (const url of urls) {
