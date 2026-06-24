@@ -1,7 +1,10 @@
+import type { StreamFormat } from "@/lib/streamFormat";
+
 export type ChannelMeta = {
   country?: string;
   language?: string;
   quality?: "SD" | "HD" | "FHD" | "4K";
+  format?: StreamFormat;
   sourceType?: "hls" | "ts" | "dash" | "iframe";
   backupUrls?: string[];
   isOfficial?: boolean;
@@ -13,6 +16,7 @@ export const channelMeta: Record<string, ChannelMeta> = {
     country: "Global",
     language: "Mixed",
     quality: "HD",
+    format: "hls",
     sourceType: "hls",
     isActive: true,
     backupUrls: [
@@ -22,10 +26,19 @@ export const channelMeta: Record<string, ChannelMeta> = {
       "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8"
     ]
   },
+  "caze-tv-fifa-world-cup-2026": {
+    country: "BR",
+    language: "Portuguese",
+    quality: "FHD",
+    format: "hls",
+    sourceType: "hls",
+    isActive: true
+  },
   "t-sports": {
     country: "BD",
     language: "Bangla",
     quality: "HD",
+    format: "hls",
     sourceType: "hls",
     isActive: true,
     backupUrls: [
@@ -37,24 +50,25 @@ export const channelMeta: Record<string, ChannelMeta> = {
     country: "BD",
     language: "Bangla",
     quality: "HD",
+    format: "hls",
     sourceType: "hls",
     isActive: true,
     backupUrls: [
       "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8"
     ]
   },
-  "jamuna-tv": { country: "BD", language: "Bangla", quality: "HD", sourceType: "hls", isActive: true },
-  "channel-24": { country: "BD", language: "Bangla", quality: "HD", sourceType: "hls", isActive: true },
-  "independent-tv": { country: "BD", language: "Bangla", quality: "HD", sourceType: "hls", isActive: true },
-  "ekattor-hd": { country: "BD", language: "Bangla", quality: "HD", sourceType: "hls", isActive: true },
-  "atn-news": { country: "BD", language: "Bangla", quality: "HD", sourceType: "hls", isActive: true },
-  "dbc-news": { country: "BD", language: "Bangla", quality: "HD", sourceType: "hls", isActive: true },
-  "dw-english-hd": { country: "DE", language: "English", quality: "HD", sourceType: "hls", isActive: true, isOfficial: true },
-  "cnn-now": { country: "US", language: "English", quality: "HD", sourceType: "hls", isActive: true },
-  "caze-tv": { country: "BR", language: "Portuguese", quality: "FHD", sourceType: "hls", isActive: true },
-  "dazn-direct": { country: "Global", language: "Mixed", quality: "HD", sourceType: "hls", isActive: true },
-  "go-live-sports": { country: "Global", language: "Mixed", quality: "HD", sourceType: "hls", isActive: true },
-  "go-live-sports-b": { country: "Global", language: "English", quality: "HD", sourceType: "hls", isActive: true },
+  "jamuna-tv": { country: "BD", language: "Bangla", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "channel-24": { country: "BD", language: "Bangla", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "independent-tv": { country: "BD", language: "Bangla", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "ekattor-hd": { country: "BD", language: "Bangla", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "atn-news": { country: "BD", language: "Bangla", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "dbc-news": { country: "BD", language: "Bangla", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "dw-english-hd": { country: "DE", language: "English", quality: "HD", format: "hls", sourceType: "hls", isActive: true, isOfficial: true },
+  "cnn-now": { country: "US", language: "English", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "caze-tv": { country: "BR", language: "Portuguese", quality: "FHD", format: "hls", sourceType: "hls", isActive: true },
+  "dazn-direct": { country: "Global", language: "Mixed", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "go-live-sports": { country: "Global", language: "Mixed", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
+  "go-live-sports-b": { country: "Global", language: "English", quality: "HD", format: "hls", sourceType: "hls", isActive: true },
 };
 
 export function getChannelMeta(channelId: string): ChannelMeta {
