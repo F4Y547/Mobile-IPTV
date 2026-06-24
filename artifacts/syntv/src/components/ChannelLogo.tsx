@@ -27,28 +27,31 @@ export default function ChannelLogo({ channel, size = "md", className = "" }: Ch
     }
   };
 
-  if (channel.logoUrl) {
-    return (
-      <div className={`overflow-hidden rounded-full flex items-center justify-center bg-zinc-900 border border-zinc-800 ${sizeClasses[size]} ${className}`}>
-        <img 
-          src={channel.logoUrl} 
-          alt={channel.name} 
-          className="w-full h-full object-contain p-1"
-          onError={(e) => {
-            (e.target as HTMLElement).style.display = 'none';
-            (e.target as HTMLElement).parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center font-bold text-white" style="background: ${getGradient(channel.category)}">${channel.name.substring(0, 2).toUpperCase()}</div>`;
-          }}
-        />
-      </div>
-    );
-  }
+  const getInitials = (name: string) => {
+    const cleaned = name
+      .replace(/[+&]/g, " ")
+      .replace(/\b(HD|TV|LIVE)\b/gi, "")
+      .trim();
+    const words = cleaned.split(/\s+/).filter(Boolean);
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+    return words.slice(0, 2).map(word => word[0]).join("").toUpperCase();
+  };
+
+  const generatedLogo = `https://ui-avatars.com/api/?name=${encodeURIComponent(channel.name)}&background=111827&color=ffffff&bold=true&format=svg`;
+  const logoUrl = channel.logoUrl || generatedLogo;
 
   return (
-    <div 
-      className={`rounded-full flex items-center justify-center font-bold text-white border border-zinc-800 shadow-inner ${sizeClasses[size]} ${className}`}
-      style={{ background: getGradient(channel.category) }}
-    >
-      {channel.name.substring(0, 2).toUpperCase()}
+    <div className={`overflow-hidden rounded-full flex items-center justify-center bg-zinc-900 border border-zinc-800 shadow-inner ${sizeClasses[size]} ${className}`}>
+      <img 
+        src={logoUrl} 
+        alt={`${channel.name} logo`} 
+        className="w-full h-full object-contain p-1"
+        referrerPolicy="no-referrer"
+        onError={(e) => {
+          (e.target as HTMLElement).style.display = 'none';
+          (e.target as HTMLElement).parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center font-black text-white" style="background: ${getGradient(channel.category)}">${getInitials(channel.name)}</div>`;
+        }}
+      />
     </div>
   );
 }
