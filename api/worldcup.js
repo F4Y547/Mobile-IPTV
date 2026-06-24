@@ -6,14 +6,22 @@ function cleanBaseUrl(value) {
 }
 
 async function fetchJson(url, headers) {
-  const response = await fetch(url, { headers });
-  if (!response.ok) {
-    throw new Error(`${url} failed with ${response.status}`);
+  const apiResponse = await fetch(url, { headers });
+  if (!apiResponse.ok) {
+    throw new Error(`${url} failed with ${apiResponse.status}`);
   }
-  return response.json();
+  return apiResponse.json();
 }
 
-export default async function handler(request, response) {
+module.exports = async function handler(request, response) {
+  if (request.method === "OPTIONS") {
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, x-api-key");
+    response.status(204).end();
+    return;
+  }
+
   const baseUrl = cleanBaseUrl(
     process.env.WORLDCUP_API_BASE_URL ||
       process.env.WORLDCUP_API_URL ||
@@ -59,4 +67,4 @@ export default async function handler(request, response) {
       groups: [],
     });
   }
-}
+};
