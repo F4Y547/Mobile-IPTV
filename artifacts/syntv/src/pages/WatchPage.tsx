@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import { channels, type Channel } from "@/data/channels";
+import { getChannelMeta } from "@/data/channelMeta";
 import HlsPlayer from "@/components/HlsPlayer";
 import ChannelLogo from "@/components/ChannelLogo";
 import BrokenChannelReport from "@/components/BrokenChannelReport";
@@ -45,6 +46,10 @@ export default function WatchPage() {
   const [playerVisible, setPlayerVisible] = useState(true);
 
   const channel = channels.find(c => c.id === channelId);
+  const playableChannel = useMemo(() => {
+    if (!channel) return null;
+    return { ...channel, ...getChannelMeta(channel.id) } as Channel;
+  }, [channel]);
 
   useEffect(() => {
     if (channel) {
@@ -67,7 +72,7 @@ export default function WatchPage() {
     return () => observer.disconnect();
   }, []);
 
-  if (!channel) {
+  if (!channel || !playableChannel) {
     return <NotFound />;
   }
 
@@ -83,7 +88,7 @@ export default function WatchPage() {
             ref={playerWrapperRef}
             className="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800 relative z-10"
           >
-            <HlsPlayer url={channel.url} channel={channel} />
+            <HlsPlayer url={playableChannel.url} channel={playableChannel} />
           </div>
 
           <div className="mt-4 md:mt-8 flex items-start gap-3 md:gap-6">
@@ -92,7 +97,7 @@ export default function WatchPage() {
               <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2 flex-wrap">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{channel.name}</h1>
                 <span className="live-badge shrink-0">LIVE</span>
-                <HealthBadge channel={channel} />
+                <HealthBadge channel={playableChannel} />
               </div>
               <span className="inline-block px-3 py-1 bg-zinc-800 text-zinc-300 text-xs md:text-sm font-semibold rounded mb-3 md:mb-4">
                 {channel.category}
